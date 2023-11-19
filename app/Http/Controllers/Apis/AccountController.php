@@ -100,9 +100,16 @@ class AccountController extends Controller
 
 
     // Delete User
-    public function delete_user()
+    public function delete_user($id)
     {
-        //
+        $del = Account::find($id);
+        $del_user = $del->delete();
+        if ($del_user) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'User deleted successfully.'
+            ]);
+        }
     }
 
 
