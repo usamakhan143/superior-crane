@@ -31,16 +31,3 @@ Route::post('update-password', [PasswordResetController::class, 'updatePassword'
 Route::post('/create-user', 'App\Http\Controllers\Apis\AccountController@create_user');
 Route::put('/edit-user/{id}', 'App\Http\Controllers\Apis\AccountController@update_user');
 Route::get('/delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@delete_user');
-
-
-Route::get('/test-email', function () {
-
-    $testMailData = [
-        'title' => 'Test Email From superiorcrane.com',
-        'body' => 'This is the body of test email.'
-    ];
-
-    Mail::to('usamaoff796@gmail.com')->send(new SendOtp($testMailData));
-
-    return 'Test email sent!';
-});

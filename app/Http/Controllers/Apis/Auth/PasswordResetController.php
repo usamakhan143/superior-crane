@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Apis\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\Auth\SendotpRequest;
+use App\Http\Requests\Apis\Auth\UpdatepasswordRequest;
 use App\Http\Requests\Apis\Auth\VerifyotpRequest;
 use App\Http\Resources\SendotpResource;
 use App\Mail\SendOtp;
 use App\Models\Apis\Auth\Account;
 use App\Models\Apis\Auth\Forgotpassword;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -75,29 +76,31 @@ class PasswordResetController extends Controller
 
 
     // Update Password
-    public function updatePassword(Request $request)
+    public function updatePassword(UpdatepasswordRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:accountss,email',
-            'otp' => 'required|digits:6',
-            'password' => 'required|min:8|confirmed',
-        ]);
+        $passwordReset = Forgotpassword::where('email', $request->email)->first();
 
-        $Forgotpassword = Forgotpassword::where('email', $request->email)
-            ->where('otp', $request->otp)
-            ->first();
-
-        if (!$Forgotpassword) {
-            return response()->json(['error' => 'Invalid OTP'], 400);
+        if (!$passwordReset) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'OTP is expired'
+            ], 400);
         }
 
-        // Update accounts password
-        $accounts = accounts::where('email', $request->email)->first();
-        $accounts->update(['password' => Hash::make($request->password)]);
+        // Update user password
+        $userid = Account::where('email', $request->email)->value('id');
+        $user = Account::find($userid);
+        $user->password = Hash::make($request->password);
+        $updatePass = $user->update();
 
-        // Delete the password reset record
-        $Forgotpassword->delete();
+        if ($updatePass) {
+            // Delete the password reset record
+            $passwordReset->delete();
 
-        return response()->json(['message' => 'Password updated successfully']);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Password updated successfully'
+            ]);
+        }
     }
 }
