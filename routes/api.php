@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Authentication Routes
 Route::post('/create-user', 'App\Http\Controllers\Apis\AccountController@create_user');
+Route::put('/edit-user/{id}', 'App\Http\Controllers\Apis\AccountController@update_user');
