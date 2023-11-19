@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+// Authentication Routes
+Route::post('/create-user', 'App\Http\Controllers\Apis\AccountController@create_user');
