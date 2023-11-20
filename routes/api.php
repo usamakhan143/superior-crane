@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\PasswordResetController;
+use App\Http\Controllers\Apis\JobController;
 use App\Mail\SendOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -35,3 +36,6 @@ Route::post('update-password', [PasswordResetController::class, 'updatePassword'
 Route::post('create-user', 'App\Http\Controllers\Apis\AccountController@create_user');
 Route::put('edit-user/{id}', 'App\Http\Controllers\Apis\AccountController@update_user');
 Route::get('delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@delete_user');
+
+// Job CRUD
+Route::post('create-job', [JobController::class, 'create_job']);
