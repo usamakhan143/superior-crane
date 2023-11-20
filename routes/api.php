@@ -25,6 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Authentication Routes
 Route::post('login', [LoginController::class, 'mobile_sign_in']); // Mobile App Login
+Route::post('web-login', [LoginController::class, 'web_sign_in']); // Web App Login
+Route::post('logout', [LoginController::class, 'logout']);
 Route::post('send-otp', [PasswordResetController::class, 'sendOtp']);
 Route::post('verify-otp', [PasswordResetController::class, 'verifyOtp']);
 Route::post('update-password', [PasswordResetController::class, 'updatePassword']);
