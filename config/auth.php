@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'superiorcranes' => [
+            'driver' => 'session',
+            'provider' => 'accounts',
+        ],
     ],
 
     /*
@@ -63,6 +68,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'accounts' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Apis\Auth\Account::class,
         ],
 
         // 'users' => [
@@ -93,6 +103,13 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+        'superiorcranes' => [
+            'provider' => 'accounts',
+            'table' => 'forgotpasswords',
+            'expire' => 60,
+            'throttle' => 60,
+        ]
     ],
 
     /*

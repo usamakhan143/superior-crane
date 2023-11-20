@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\PasswordResetController;
 use App\Mail\SendOtp;
 use Illuminate\Http\Request;
@@ -23,11 +24,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 // Authentication Routes
+Route::post('login', [LoginController::class, 'mobile_sign_in']); // Mobile App Login
 Route::post('send-otp', [PasswordResetController::class, 'sendOtp']);
 Route::post('verify-otp', [PasswordResetController::class, 'verifyOtp']);
 Route::post('update-password', [PasswordResetController::class, 'updatePassword']);
 
 // User CRUD
-Route::post('/create-user', 'App\Http\Controllers\Apis\AccountController@create_user');
-Route::put('/edit-user/{id}', 'App\Http\Controllers\Apis\AccountController@update_user');
-Route::get('/delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@delete_user');
+Route::post('create-user', 'App\Http\Controllers\Apis\AccountController@create_user');
+Route::put('edit-user/{id}', 'App\Http\Controllers\Apis\AccountController@update_user');
+Route::get('delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@delete_user');
