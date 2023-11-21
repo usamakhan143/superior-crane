@@ -32,7 +32,7 @@ class AddjobRequest extends FormRequest
             'riggerAssigned' => 'required|numeric',
             'supplierName' => 'required|string',
             'notes' => 'required|string',
-            'imageFiles' => 'mimes:jpg,png,jpeg',
+            'imageFiles.*' => 'file|mimes:jpg,png,jpeg',
             'enterBy' => 'required',
             'isSCCI' => 'boolean',
             'userId' => 'required|numeric|exists:accounts,id'
