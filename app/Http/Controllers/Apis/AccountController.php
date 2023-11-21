@@ -56,45 +56,51 @@ class AccountController extends Controller
     public function update_user(UpdateAccountRequest $request, $id)
     {
         $edit_user = Account::find($id);
+        if ($edit_user !== null) {
+            if (!empty($request->all())) {
+                $data = [
+                    'role' => $request->role ?? $edit_user->role,
+                    'email' => $edit_user->email,
+                    'password' => Hash::make($request->password) ?? $edit_user->password,
+                    'name' => $request->name ?? $edit_user->name,
+                    'username' => $edit_user->username,
+                    'status' => $request->status ?? $edit_user->status
+                ];
 
-        if (!empty($request->all())) {
-            $data = [
-                'role' => $request->role ?? $edit_user->role,
-                'email' => $edit_user->email,
-                'password' => Hash::make($request->password) ?? $edit_user->password,
-                'name' => $request->name ?? $edit_user->name,
-                'username' => $edit_user->username,
-                'status' => $request->status ?? $edit_user->status
-            ];
 
+                $edit_user->name = $data['name'];
+                $edit_user->email = $data['email'];
+                $edit_user->password = $data['password'];
+                $edit_user->username = $data['username'];
+                $edit_user->role = $data['role'];
+                $edit_user->status = $data['status'];
 
-            $edit_user->name = $data['name'];
-            $edit_user->email = $data['email'];
-            $edit_user->password = $data['password'];
-            $edit_user->username = $data['username'];
-            $edit_user->role = $data['role'];
-            $edit_user->status = $data['status'];
+                $update_user = $edit_user->update();
 
-            $update_user = $edit_user->update();
-
-            if ($update_user) {
-                $r_data = new AccountResource($edit_user);
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'User updated successfully.',
-                    'data' => $r_data
-                ]);
+                if ($update_user) {
+                    $r_data = new AccountResource($edit_user);
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'User updated successfully.',
+                        'data' => $r_data
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 404,
+                        'message' => 'Something went wrong.'
+                    ]);
+                }
             } else {
                 return response()->json([
                     'status' => 404,
-                    'message' => 'Something went wrong.'
+                    'message' => 'No data requested to update.'
                 ]);
             }
         } else {
             return response()->json([
                 'status' => 404,
-                'message' => 'No data requested to update.'
-            ]);
+                'message' => 'Userid doesnot exist.'
+            ], 404);
         }
     }
 
@@ -103,12 +109,19 @@ class AccountController extends Controller
     public function delete_user($id)
     {
         $del = Account::find($id);
-        $del_user = $del->delete();
-        if ($del_user) {
+        if ($del !== null) {
+            $del_user = $del->delete();
+            if ($del_user) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'User deleted successfully.'
+                ]);
+            }
+        } else {
             return response()->json([
-                'status' => 200,
-                'message' => 'User deleted successfully.'
-            ]);
+                'status' => 404,
+                'message' => 'Userid doesnot exist.'
+            ], 404);
         }
     }
 
