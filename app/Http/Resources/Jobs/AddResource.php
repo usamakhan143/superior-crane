@@ -26,7 +26,7 @@ class AddResource extends JsonResource
             'riggerAssigned' => $this->rigger_assigned,
             'supplierName' => $this->supplier_name,
             'notes' => $this->notes,
-            'imageFiles' => $this->images,
+            'imageFiles' => $this->images->pluck('file_url')->toArray(),
             'enterBy' => $this->enter_by,
             'statusCode' => $this->status_code,
             'isSCCI' => $this->is_scci

@@ -5,12 +5,12 @@ namespace App\Models\Apis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Job extends Model
+class File extends Model
 {
     use HasFactory;
 
-    public function images()
+    public function job()
     {
-        return $this->hasMany(File::class, 'job_id');
+        return $this->belongsTo(Job::class, 'job_id');
     }
 }
