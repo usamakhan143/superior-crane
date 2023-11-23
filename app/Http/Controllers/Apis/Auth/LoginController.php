@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Apis\Auth;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\Auth\LoginRequest;
 use App\Http\Resources\AccountResource;
@@ -10,6 +11,13 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    private $appRoles;
+
+    public function __construct()
+    {
+        $this->appRoles = Helper::getRoles();
+    }
+
     public function mobile_sign_in(LoginRequest $request)
     {
         $email = $request->email;
@@ -18,7 +26,7 @@ class LoginController extends Controller
         $userRole = Account::where('email', $email)->value('role');
         $userStatus = Account::where('email', $email)->value('status');
 
-        if ($userRole == 'manager' || $userRole == 'user') {
+        if ($userRole == $this->appRoles['m'] || $userRole == $this->appRoles['bu']) {
             if ($userStatus == 1) {
                 $userLogged = Auth::guard('superiorcranes')->attempt([
                     'email' => $email,
@@ -64,7 +72,7 @@ class LoginController extends Controller
         $userRole = Account::where('email', $email)->value('role');
         $userStatus = Account::where('email', $email)->value('status');
 
-        if ($userRole == 'admin' || $userRole == 'super_admin') {
+        if ($userRole == $this->appRoles['a'] || $userRole == $this->appRoles['sa']) {
             if ($userStatus == 1) {
                 $userLogged = Auth::guard('superiorcranes')->attempt([
                     'email' => $email,
