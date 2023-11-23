@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Job Form</title>
+</head>
+
+<body>
+
+    <form id="createJobForm">
+        <label for="clientName">Client Name:</label>
+        <input type="text" id="clientName" name="clientName" required><br>
+
+        <label for="jobDate">Job Date:</label>
+        <input type="date" id="jobDate" name="jobDate" required><br>
+
+        <label for="jobTime">Job Time:</label>
+        <input type="text" id="jobTime" name="jobTime" required><br>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required><br>
+
+        <label for="equipmentToBeUsed">Equipment to be Used:</label>
+        <input type="text" id="equipmentToBeUsed" name="equipmentToBeUsed" required><br>
+
+        <label for="riggerAssigned">Rigger Assigned:</label>
+        <input type="text" id="riggerAssigned" name="riggerAssigned" required><br>
+
+        <label for="supplierName">Supplier Name:</label>
+        <input type="text" id="supplierName" name="supplierName" required><br>
+
+        <label for="notes">Notes:</label>
+        <textarea id="notes" name="notes"></textarea><br>
+
+        <label for="imageFiles">Image Files:</label>
+        <input type="file" id="imageFiles" name="imageFiles" multiple accept="image/*"><br>
+
+        <label for="enterBy">Enter By:</label>
+        <input type="text" id="enterBy" name="enterBy" required><br>
+
+        <label for="isSCCI">Is SCCI:</label>
+        <input type="text" id="isSCCI" name="isSCCI" required><br>
+
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId" required><br>
+
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('createJobForm');
+            const formData = new FormData(form);
+
+            // Get the selected image files
+            const imageFilesInput = document.getElementById('imageFiles');
+            const imageFiles = imageFilesInput.files;
+
+            // Conditionally append image files to FormData
+            if (imageFiles.length > 0) {
+                for (let i = 0; i < imageFiles.length; i++) {
+                    formData.append('imageFiles[]', imageFiles[i]);
+                }
+            }
+
+            // Replace with the actual API endpoint
+            const apiUrl = 'https://test.visech.com/api/create-job';
+
+            fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status == 200) {
+                        console.log('Status = 200 (API Response:)', data.data);
+                    } else {
+                        console.log('Status = 422 (Errors:)', data.errors);
+                    }
+                    // Handle the API response here
+                })
+                .catch(error => {
+                    console.error('Error:', data);
+                    // Handle errors here
+                });
+        }
+    </script>
+
+</body>
+
+</html>
