@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Apis\Auth;
+namespace App\Http\Requests\Apis;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VerifyotpRequest extends FormRequest
+class UpdatejobRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,22 +24,19 @@ class VerifyotpRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|exists:accounts,email',
-            'otp' => 'required|digits:4',
+            'riggerAssigned' => 'numeric',
+            'imageFiles.*' => 'file|mimes:jpg,png,jpeg',
+            // 'enterBy' => 'required',
+            'isSCCI' => 'boolean'
         ];
     }
-
-
+    
     public function messages()
     {
         return [
-            'email.required' => 'The email field is required.',
-            'email.exists' => 'The email is not exist.',
-            'otp.required' => 'The otp field is required.',
-            'otp.digits' => 'Enter the 4-digit (OTP) for verification.',
+            "isSCCI.boolean" => "The SCCI field must be true or false.",
         ];
     }
-
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {

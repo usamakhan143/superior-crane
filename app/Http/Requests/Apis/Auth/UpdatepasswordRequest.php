@@ -43,7 +43,7 @@ class UpdatepasswordRequest extends FormRequest
     {
         $response = response()->json([
             'status' => 422,
-            'error' => 'Validation failed',
+            'message' => 'Validation failed',
             'errors' => $validator->errors(),
         ], 422);
 

@@ -39,3 +39,4 @@ Route::get('delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@dele
 
 // Job CRUD
 Route::post('create-job', [JobController::class, 'create_job']);
+Route::put('edit-job/{id}', [JobController::class, 'update_job']);
