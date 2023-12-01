@@ -106,16 +106,17 @@ class JobController extends Controller
         $userRole = Account::where('id', $request->userId)->value('role');
         if ($userRole == $this->appRoles['a'] || $userRole == $this->appRoles['sa'] || $userRole == $this->appRoles['m']) {
             $edit_job = Job::find($id);
-            return response()->json($request->all());
             $files = $request->file('imageFiles');
             if (is_array($files)) {
                 $image_data = [
                     'countPhoto' => count($files),
                     'folderName' => 'job-gallery',
-                    'imageName' => 'job-image'
+                    'imageName' => 'job-image-u'
                 ];
                 // Save Images to folder.
-                $imageFiles = Fileupload::multiUploadFile($files, $image_data['countPhoto'], $image_data['folderName'], $image_data['imageName']);
+                if($image_data['countPhoto'] < 5){
+                    $imageFiles = Fileupload::multiUploadFile($files, $image_data['countPhoto'], $image_data['folderName'], $image_data['imageName']);
+                }
             }
 
             $edit_job->client_name = $request->clientName ?? $edit_job->client_name;
@@ -164,6 +165,13 @@ class JobController extends Controller
                     'data' => $r_data,
                 ]);
             }
+        }
+        else
+        {   
+            return response()->json([
+                'status' => 401,
+                'message' => 'You are not authorized for this action.'
+            ], 401);
         }
     }
 }
