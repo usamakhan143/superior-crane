@@ -38,5 +38,6 @@ Route::put('edit-user/{id}', 'App\Http\Controllers\Apis\AccountController@update
 Route::get('delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@delete_user');
 
 // Job CRUD
+Route::get('jobs', [JobController::class, 'get_jobs']);
 Route::post('create-job', [JobController::class, 'create_job']);
 Route::put('edit-job/{id}', [JobController::class, 'update_job']);

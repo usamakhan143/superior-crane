@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\AddjobRequest;
 use App\Http\Requests\Apis\UpdatejobRequest;
 use App\Http\Resources\Jobs\AddResource;
+use App\Http\Resources\Jobs\GetjobResource;
 use App\Models\Apis\Auth\Account;
 use App\Models\Apis\File;
 use App\Models\Apis\Job;
@@ -19,6 +20,17 @@ class JobController extends Controller
     public function __construct()
     {
         $this->appRoles = Helper::getRoles();
+    }
+
+    // Get all Jobs
+    public function get_jobs()
+    {
+        $all_jobs = Job::get();
+        $r_data = GetjobResource::collection($all_jobs);
+        return response()->json([
+            'status' => 200,
+            'data' => $r_data
+        ]);
     }
 
     // Create Job
@@ -106,68 +118,73 @@ class JobController extends Controller
         $userRole = Account::where('id', $request->userId)->value('role');
         if ($userRole == $this->appRoles['a'] || $userRole == $this->appRoles['sa'] || $userRole == $this->appRoles['m']) {
             $edit_job = Job::find($id);
-            $files = $request->file('imageFiles');
-            if (is_array($files)) {
-                $image_data = [
-                    'countPhoto' => count($files),
-                    'folderName' => 'job-gallery',
-                    'imageName' => 'job-image-u'
-                ];
-                // Save Images to folder.
-                if($image_data['countPhoto'] < 5){
-                    $imageFiles = Fileupload::multiUploadFile($files, $image_data['countPhoto'], $image_data['folderName'], $image_data['imageName']);
-                }
-            }
-
-            $edit_job->client_name = $request->clientName ?? $edit_job->client_name;
-            $edit_job->job_number = $edit_job->job_number;
-            $edit_job->job_date = $request->jobDate ?? $edit_job->job_date;
-            $edit_job->job_time = $request->jobTime ?? $edit_job->job_time;
-            $edit_job->address = $request->address ?? $edit_job->address;
-            $edit_job->equipment_used = $request->equipmentToBeUsed ?? $edit_job->equipment_used;
-            $edit_job->rigger_assigned = $request->riggerAssigned ?? $edit_job->rigger_assigned;
-            $edit_job->supplier_name = $request->supplierName ?? $edit_job->supplier_name;
-            $edit_job->enter_by = $request->enterBy ?? $edit_job->enter_by;
-            $edit_job->status_code = $request->statusCode ?? $edit_job->status_code;
-            $edit_job->notes = $request->notes ?? $edit_job->notes;
-            $edit_job->is_scci = $request->isSCCI ?? $edit_job->is_scci;
-            $edit_job->account_id = $edit_job->account_id;
-            $edit_job->is_rigger = $edit_job->is_rigger;
-            $edit_job->is_transportation = $edit_job->is_transportation;
-            $edit_job->pdf_rigger = $edit_job->pdf_rigger;
-            $edit_job->pdf_transportation = $edit_job->pdf_rigger;
-
-            $update_job = $edit_job->update();
-
-            if ($update_job) {
-
+            if ($edit_job !== null) {
+                $files = $request->file('imageFiles');
                 if (is_array($files)) {
-                    foreach ($imageFiles as $imageFile) {
-                        $add_file = new File();
-                        $add_file->file_url = $imageFile;
-                        $add_file->base_url = url('') . '/';
-                        $add_file->file_type = 'job-gallery';
-                        $add_file->file_ext_type = 'image';
-                        $add_file->job_id = $edit_job->id;
-                        $add_file->account_id = $edit_job->account_id;
-                        $add_file->rigger_id = 0;
-                        $add_file->transportation_id = 0;
-                        $add_file->payduty_id = 0;
-
-                        $add_file->save();
+                    $image_data = [
+                        'countPhoto' => count($files),
+                        'folderName' => 'job-gallery',
+                        'imageName' => 'job-image-u'
+                    ];
+                    // Save Images to folder.
+                    if ($image_data['countPhoto'] < 5) {
+                        $imageFiles = Fileupload::multiUploadFile($files, $image_data['countPhoto'], $image_data['folderName'], $image_data['imageName']);
                     }
                 }
 
-                $r_data = new AddResource($edit_job);
+                $edit_job->client_name = $request->clientName ?? $edit_job->client_name;
+                $edit_job->job_number = $edit_job->job_number;
+                $edit_job->job_date = $request->jobDate ?? $edit_job->job_date;
+                $edit_job->job_time = $request->jobTime ?? $edit_job->job_time;
+                $edit_job->address = $request->address ?? $edit_job->address;
+                $edit_job->equipment_used = $request->equipmentToBeUsed ?? $edit_job->equipment_used;
+                $edit_job->rigger_assigned = $request->riggerAssigned ?? $edit_job->rigger_assigned;
+                $edit_job->supplier_name = $request->supplierName ?? $edit_job->supplier_name;
+                $edit_job->enter_by = $request->enterBy ?? $edit_job->enter_by;
+                $edit_job->status_code = $request->statusCode ?? $edit_job->status_code;
+                $edit_job->notes = $request->notes ?? $edit_job->notes;
+                $edit_job->is_scci = $request->isSCCI ?? $edit_job->is_scci;
+                $edit_job->account_id = $edit_job->account_id;
+                $edit_job->is_rigger = $edit_job->is_rigger;
+                $edit_job->is_transportation = $edit_job->is_transportation;
+                $edit_job->pdf_rigger = $edit_job->pdf_rigger;
+                $edit_job->pdf_transportation = $edit_job->pdf_rigger;
+
+                $update_job = $edit_job->update();
+
+                if ($update_job) {
+
+                    if (is_array($files)) {
+                        foreach ($imageFiles as $imageFile) {
+                            $add_file = new File();
+                            $add_file->file_url = $imageFile;
+                            $add_file->base_url = url('') . '/';
+                            $add_file->file_type = 'job-gallery';
+                            $add_file->file_ext_type = 'image';
+                            $add_file->job_id = $edit_job->id;
+                            $add_file->account_id = $edit_job->account_id;
+                            $add_file->rigger_id = 0;
+                            $add_file->transportation_id = 0;
+                            $add_file->payduty_id = 0;
+
+                            $add_file->save();
+                        }
+                    }
+
+                    $r_data = new AddResource($edit_job);
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Job updated successfully.',
+                        'data' => $r_data,
+                    ]);
+                }
+            } else {
                 return response()->json([
-                    'status' => 200,
-                    'message' => 'Job updated successfully.',
-                    'data' => $r_data,
-                ]);
+                    'status' => 404,
+                    'message' => 'JobId doesnot exist.'
+                ], 404);
             }
-        }
-        else
-        {   
+        } else {
             return response()->json([
                 'status' => 401,
                 'message' => 'You are not authorized for this action.'

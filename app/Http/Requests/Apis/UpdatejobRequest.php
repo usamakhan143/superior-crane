@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Apis;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatejobRequest extends FormRequest
 {
@@ -23,18 +24,23 @@ class UpdatejobRequest extends FormRequest
      */
     public function rules()
     {
+        $status = ['goodTogo', 'onHold', 'inProblem'];
         return [
             'riggerAssigned' => 'numeric',
             'imageFiles.*' => 'file|mimes:jpg,png,jpeg',
             // 'enterBy' => 'required',
+            'statusCode' => [
+                Rule::in($status)
+            ],
             'isSCCI' => 'boolean'
         ];
     }
-    
+
     public function messages()
     {
         return [
             "isSCCI.boolean" => "The SCCI field must be true or false.",
+            "statusCode.in" => "There are only three status available in the system: goodTogo, onHold, inProblem"
         ];
     }
 
