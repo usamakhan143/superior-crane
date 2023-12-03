@@ -7,7 +7,9 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\AddriggerticketRequest;
 use App\Models\Apis\Auth\Account;
+use App\Models\Apis\File;
 use App\Models\Apis\Job;
+use App\Models\Apis\Payduty;
 use App\Models\Apis\Rigger;
 
 class RiggerController extends Controller
@@ -68,6 +70,41 @@ class RiggerController extends Controller
                 $add_riggertik->isPayDuty = $request->isPayDuty;
                 $add_riggertik->job_id = $request->jobId;
                 $add_riggertik->account_id = $request->userId;
+
+                $save_ticket = $add_riggertik->save();
+                if ($save_ticket) {
+                    if ($request->isPayDuty != 0) {
+                        $add_payduty = new Payduty();
+                        $add_payduty->date = $request->date;
+                        $add_payduty->location = $request->location;
+                        $add_payduty->startTime = $request->startTime;
+                        $add_payduty->finishTime = $request->finishTime;
+                        $add_payduty->totalHours = $request->totalHours;
+                        $add_payduty->officer = $request->officer;
+                        $add_payduty->officerName = $request->officerName;
+                        $add_payduty->division = $request->division;
+                        $add_payduty->email = $request->emailAddress;
+                        $add_payduty->account_id = $request->userId;
+                        $add_payduty->rigger_id = $add_riggertik->id;
+                    }
+
+                    if (is_array($files)) {
+                        foreach ($imageFiles as $imageFile) {
+                            $add_file = new File();
+                            $add_file->file_url = $imageFile;
+                            $add_file->base_url = url('') . '/';
+                            $add_file->file_type = 'rigger-gallery';
+                            $add_file->file_ext_type = 'image';
+                            $add_file->job_id = 0;
+                            $add_file->account_id = $add_riggertik->account_id;
+                            $add_file->rigger_id = $add_riggertik->id;
+                            $add_file->transportation_id = 0;
+                            $add_file->payduty_id = 0;
+
+                            $add_file->save();
+                        }
+                    }
+                }
             } else {
                 return response()->json([
                     'status' => 404,

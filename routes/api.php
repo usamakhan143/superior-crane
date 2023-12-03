@@ -3,6 +3,7 @@
 use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\PasswordResetController;
 use App\Http\Controllers\Apis\JobController;
+use App\Http\Controllers\Apis\RiggerController;
 use App\Mail\SendOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -41,3 +42,6 @@ Route::get('delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@dele
 Route::get('jobs', [JobController::class, 'get_jobs']);
 Route::post('create-job', [JobController::class, 'create_job']);
 Route::put('edit-job/{id}', [JobController::class, 'update_job']);
+
+// Rigger Ticket
+Route::post('rigger-ticket', [RiggerController::class, 'create_ticket']);
