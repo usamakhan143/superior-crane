@@ -2,19 +2,17 @@
 
 namespace App\Helpers;
 
-use Image;
-
 class Fileupload
 {
 
-    static function singleUploadFile($uploadedFile, $profileId, $folderName)
+    static function singleUploadFile($uploadedFile, $entityid, $folderName, $name)
     {
 
         // $file_size = $uploadedFile->getSize();
         // dd($uploadedFile->getRealPath());
         $file_ext = $uploadedFile->getClientOriginalExtension();
 
-        $file_name = $profileId . "." . $file_ext;
+        $file_name = $name . "_" . $entityid . "." . $file_ext;
 
         if (request()->getHttpHost() == '127.0.0.1:8000') {
             $path = public_path($folderName); // '/profile_images/'
@@ -22,8 +20,7 @@ class Fileupload
             $path = storage_path($folderName); // '/profile_images/'
         }
 
-        $img = Image::make($uploadedFile->getRealPath());
-        $img->resize(300, 300)->save($path . '/' . $file_name);
+        $uploadedFile->move($path, $file_name);
 
         // $img->move($path, $file_name);
 
