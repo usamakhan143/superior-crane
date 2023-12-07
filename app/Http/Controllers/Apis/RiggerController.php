@@ -23,6 +23,24 @@ class RiggerController extends Controller
         $this->appRoles = Helper::getRoles();
     }
 
+    public function getRiggerTickets($email) {
+        $userRole = Account::where('email', $email)->value('role');
+        if ($userRole == $this->appRoles['sa'] || $userRole == $this->appRoles['a']) {
+            $get_tickets = Rigger::get();
+            $r_data = RiggerResource::collection($get_tickets);
+            return response()->json([
+                'status' => 200,
+                'data' => $r_data
+            ], 200);
+        }
+        else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'You are not authorized for this action.'
+            ], 401);
+        }
+    }
+
     public function create_ticket(AddriggerticketRequest $request)
     {
         $userRole = Account::where('id', $request->userId)->value('role');

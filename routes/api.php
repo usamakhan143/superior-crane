@@ -45,3 +45,4 @@ Route::put('edit-job/{id}', [JobController::class, 'update_job']);
 
 // Rigger Ticket
 Route::post('rigger-ticket', [RiggerController::class, 'create_ticket']);
+Route::get('rigger-tickets/{email}', [RiggerController::class, 'getRiggerTickets']);
