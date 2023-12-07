@@ -6,6 +6,8 @@ use App\Helpers\Fileupload;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\AddriggerticketRequest;
+use App\Http\Resources\Rigger\RiggerpaydutyResource;
+use App\Http\Resources\Rigger\RiggerResource;
 use App\Models\Apis\Auth\Account;
 use App\Models\Apis\File;
 use App\Models\Apis\Job;
@@ -29,6 +31,7 @@ class RiggerController extends Controller
             if ($checkJob != 1) {
                 $files = $request->file('imageFiles');
                 $rigger_sign = $request->file('signature');
+                $payduty_sign = $request->file('pdSignature');
                 if (is_array($files)) {
                     $image_data = [
                         'countPhoto' => count($files),
@@ -76,54 +79,95 @@ class RiggerController extends Controller
                 if ($save_ticket) {
                     $signature_data = [
                         'folderName' => 'rigger-signatures',
-                        'imageName' => 'rigger-sign'
+                        'imageName' => 'rigger-sign',
+                        'file_type' => 'signature',
+                        'file_ext_type' => 'image',
+                        'riggerId' => $add_riggertik->id,
+                        'userId' => $add_riggertik->account_id,
                     ];
                     // Save rigger signature to folder.
-                    $rigger_signature = Fileupload::singleUploadFile($rigger_sign, $add_riggertik->id, $signature_data['folderName'], $signature_data['imageName']);
+                    $rigger_signature = Fileupload::singleUploadFile($rigger_sign, $signature_data['riggerId'], $signature_data['folderName'], $signature_data['imageName']);
                     // Save rigger signature to db.
-                    $add_signature = new File();
-                    $add_file->file_url = $imageFile;
-                    $add_file->base_url = url('') . '/';
-                    $add_file->file_type = 'rigger-gallery';
-                    $add_file->file_ext_type = 'image';
-                    $add_file->job_id = 0;
-                    $add_file->account_id = $add_riggertik->account_id;
-                    $add_file->rigger_id = $add_riggertik->id;
-                    $add_file->transportation_id = 0;
-                    $add_file->payduty_id = 0;
+                    $save_signature = Helper::addFile($rigger_signature, $signature_data['file_type'], $signature_data['file_ext_type'], 0, $signature_data['userId'], $signature_data['riggerId'], 0, 0);
 
-                            $add_file->save();
+                    if($save_signature)
+                    {
+                        if (is_array($files)) {
+                            foreach ($imageFiles as $imageFile) {
+                                $add_file = new File();
+                                $add_file->file_url = $imageFile;
+                                $add_file->base_url = url('') . '/';
+                                $add_file->file_type = 'rigger-gallery';
+                                $add_file->file_ext_type = 'image';
+                                $add_file->job_id = 0;
+                                $add_file->account_id = $add_riggertik->account_id;
+                                $add_file->rigger_id = $add_riggertik->id;
+                                $add_file->transportation_id = 0;
+                                $add_file->payduty_id = 0;
 
-                    if ($request->isPayDuty != 0) {
-                        $add_payduty = new Payduty();
-                        $add_payduty->date = $request->date;
-                        $add_payduty->location = $request->location;
-                        $add_payduty->startTime = $request->startTime;
-                        $add_payduty->finishTime = $request->finishTime;
-                        $add_payduty->totalHours = $request->totalHours;
-                        $add_payduty->officer = $request->officer;
-                        $add_payduty->officerName = $request->officerName;
-                        $add_payduty->division = $request->division;
-                        $add_payduty->email = $request->emailAddress;
-                        $add_payduty->account_id = $request->userId;
-                        $add_payduty->rigger_id = $add_riggertik->id;
-                    }
-
-                    if (is_array($files)) {
-                        foreach ($imageFiles as $imageFile) {
-                            $add_file = new File();
-                            $add_file->file_url = $imageFile;
-                            $add_file->base_url = url('') . '/';
-                            $add_file->file_type = 'rigger-gallery';
-                            $add_file->file_ext_type = 'image';
-                            $add_file->job_id = 0;
-                            $add_file->account_id = $add_riggertik->account_id;
-                            $add_file->rigger_id = $add_riggertik->id;
-                            $add_file->transportation_id = 0;
-                            $add_file->payduty_id = 0;
-
-                            $add_file->save();
+                                $add_file->save();
+                            }
                         }
+
+                        if ($request->isPayDuty != 0) {
+                            $add_payduty = new Payduty();
+                            $add_payduty->date = $request->pdDate;
+                            $add_payduty->location = $request->pdLocation;
+                            $add_payduty->startTime = $request->pdStartTime;
+                            $add_payduty->finishTime = $request->pdFinishTime;
+                            $add_payduty->totalHours = $request->pdTotalHours;
+                            $add_payduty->officer = $request->pdOfficer;
+                            $add_payduty->officerName = $request->pdOfficerName;
+                            $add_payduty->division = $request->pdDivision;
+                            $add_payduty->email = $request->pdEmailAddress;
+                            $add_payduty->account_id = $add_riggertik->account_id;
+                            $add_payduty->rigger_id = $add_riggertik->id;
+
+                            $savePayduty = $add_payduty->save();
+
+                            if($savePayduty)
+                            {
+                                $payduty_signature_data = [
+                                    'folderName' => 'payduty-signatures',
+                                    'imageName' => 'payduty-sign',
+                                    'file_type' => 'signature',
+                                    'file_ext_type' => 'image',
+                                    'payduty_id' => $add_payduty->id,
+                                    'userId' => $add_riggertik->account_id,
+                                ];
+                                $payduty_signature = Fileupload::singleUploadFile($payduty_sign, $payduty_signature_data['payduty_id'], $payduty_signature_data['folderName'], $payduty_signature_data['imageName']);
+                                // Save rigger signature to db.
+                                $save_pd_signature = Helper::addFile($payduty_signature, $payduty_signature_data['file_type'], $payduty_signature_data['file_ext_type'], 0, $payduty_signature_data['userId'], 0, 0, $payduty_signature_data['payduty_id']);
+                                if($save_pd_signature){
+                                    $r_data = new RiggerpaydutyResource($add_riggertik);
+                                    return response()->json([
+                                        'status' => 200,
+                                        'message' => 'Rigger ticket submitted with payduty successfully.',
+                                        'data' => $r_data
+                                    ], 200);
+                                }
+                            }
+                            else
+                            {
+                                return response()->json([
+                                    'status' => 404,
+                                    'message' => 'Something went wrong while saving payduty.'
+                                ], 404);
+                            }
+                        }
+                        $r_data = new RiggerResource($add_riggertik);
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'Rigger ticket submitted successfully.',
+                            'data' => $r_data
+                        ], 200);
+
+                    }
+                    else {
+                        return response()->json([
+                            'status' => 404,
+                            'message' => 'Something went wrong with the signature.'
+                        ], 404);
                     }
                 }
             } else {

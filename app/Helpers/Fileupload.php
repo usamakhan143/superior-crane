@@ -24,7 +24,7 @@ class Fileupload
 
         // $img->move($path, $file_name);
 
-        $fullpath = $folderName . '' . $file_name;
+        $fullpath = $folderName . '/' . $file_name;
 
         return $fullpath;
     }

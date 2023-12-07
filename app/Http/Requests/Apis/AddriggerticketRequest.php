@@ -63,6 +63,19 @@ class AddriggerticketRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            "pdDate.required_if" => "The payduty date is required",
+            "pdLocation.required_if" => "The payduty location is required",
+            "pdOfficerName.required_if" => "The payduty officer name is required",
+            "pdEmailAddress.required_if" => "The payduty email is required",
+            "pdSignature.required_if" => "The payduty signature is required",
+            "pdDivision.numeric" => "The payduty division should be in number",
+            "pdTotalHours.numeric" => "The payduty total hours should be in number",
+            "pdEmailAddress.email" => "The payduty email address must be a valid email address",
+        ];
+    }
 
 
 

@@ -11,6 +11,6 @@ class Job extends Model
 
     public function images()
     {
-        return $this->hasMany(File::class, 'job_id');
+        return $this->hasMany(File::class, 'job_id')->where('file_type', 'job-gallery');;
     }
 }
