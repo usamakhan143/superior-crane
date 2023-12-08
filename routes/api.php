@@ -3,6 +3,7 @@
 use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\PasswordResetController;
 use App\Http\Controllers\Apis\JobController;
+use App\Http\Controllers\Apis\PdfController;
 use App\Http\Controllers\Apis\RiggerController;
 use App\Mail\SendOtp;
 use Illuminate\Http\Request;
@@ -46,3 +47,6 @@ Route::put('edit-job/{id}', [JobController::class, 'update_job']);
 // Rigger Ticket
 Route::post('rigger-ticket', [RiggerController::class, 'create_ticket']);
 Route::get('rigger-tickets/{email}', [RiggerController::class, 'getRiggerTickets']);
+
+// Generate PDFs
+Route::get('pdf/{id}', [PdfController::class, 'generatePdf']);
