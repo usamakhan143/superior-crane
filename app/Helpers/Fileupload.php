@@ -52,4 +52,18 @@ class Fileupload
         $fullpath_array = $fullpath;
         return $fullpath_array;
     }
+
+    static function pdfUpload($pdf, $folderName, $name)
+    {
+        if (request()->getHttpHost() == '127.0.0.1:8000') {
+            $path = public_path('pdf/' . $folderName) . '/' . $name . '.pdf';
+        } else {
+            $path = storage_path('pdf/' . $folderName) . '/' . $name . '.pdf';
+        }
+
+        $pdf->save($path);
+        $fullpath = 'pdf/' . $folderName . '/' . $name . '.pdf';
+
+        return $fullpath;
+    }
 }

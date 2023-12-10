@@ -23,7 +23,8 @@ class RiggerController extends Controller
         $this->appRoles = Helper::getRoles();
     }
 
-    public function getRiggerTickets($email) {
+    public function getRiggerTickets($email)
+    {
         $userRole = Account::where('email', $email)->value('role');
         if ($userRole == $this->appRoles['sa'] || $userRole == $this->appRoles['a']) {
             $get_tickets = Rigger::get();
@@ -32,8 +33,7 @@ class RiggerController extends Controller
                 'status' => 200,
                 'data' => $r_data
             ], 200);
-        }
-        else {
+        } else {
             return response()->json([
                 'status' => 401,
                 'message' => 'You are not authorized for this action.'
@@ -108,8 +108,7 @@ class RiggerController extends Controller
                     // Save rigger signature to db.
                     $save_signature = Helper::addFile($rigger_signature, $signature_data['file_type'], $signature_data['file_ext_type'], 0, $signature_data['userId'], $signature_data['riggerId'], 0, 0);
 
-                    if($save_signature)
-                    {
+                    if ($save_signature['isSave']) {
                         if (is_array($files)) {
                             foreach ($imageFiles as $imageFile) {
                                 $add_file = new File();
@@ -143,8 +142,7 @@ class RiggerController extends Controller
 
                             $savePayduty = $add_payduty->save();
 
-                            if($savePayduty)
-                            {
+                            if ($savePayduty) {
                                 $payduty_signature_data = [
                                     'folderName' => 'payduty-signatures',
                                     'imageName' => 'payduty-sign',
@@ -156,7 +154,7 @@ class RiggerController extends Controller
                                 $payduty_signature = Fileupload::singleUploadFile($payduty_sign, $payduty_signature_data['payduty_id'], $payduty_signature_data['folderName'], $payduty_signature_data['imageName']);
                                 // Save rigger signature to db.
                                 $save_pd_signature = Helper::addFile($payduty_signature, $payduty_signature_data['file_type'], $payduty_signature_data['file_ext_type'], 0, $payduty_signature_data['userId'], 0, 0, $payduty_signature_data['payduty_id']);
-                                if($save_pd_signature){
+                                if ($save_pd_signature['isSave']) {
                                     $r_data = new RiggerpaydutyResource($add_riggertik);
                                     return response()->json([
                                         'status' => 200,
@@ -164,9 +162,7 @@ class RiggerController extends Controller
                                         'data' => $r_data
                                     ], 200);
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 return response()->json([
                                     'status' => 404,
                                     'message' => 'Something went wrong while saving payduty.'
@@ -179,9 +175,7 @@ class RiggerController extends Controller
                             'message' => 'Rigger ticket submitted successfully.',
                             'data' => $r_data
                         ], 200);
-
-                    }
-                    else {
+                    } else {
                         return response()->json([
                             'status' => 404,
                             'message' => 'Something went wrong with the signature.'
