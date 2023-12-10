@@ -122,7 +122,7 @@
 <body>
     <div class="header">
         <div class="header-child">
-            <img class="logo" src="{{ app()->isLocal() ? './logo.png' : asset('./logo.png') }}" alt="Company Logo" />
+            <img class="logo" src="{{ app()->isLocal() ? './logo.png' : asset('logo.png') }}" alt="Company Logo" />
         </div>
         <div class="company-head">
             <h1 class="company-info">SUPERIOR CRANE CANADA INC.</h1>

@@ -32,7 +32,11 @@ class PdfController extends Controller
         $pdfPath = Fileupload::pdfUpload($pdf, $pdfData['folder_name'], $pdfData['file_name']);
 
         $saveInDb = Helper::addFile($pdfPath, $pdfData['file_type'], $pdfData['file_ext'], 0, $data->account_id, $data->id, 0, 0);
-        $getFullPath = $saveInDb['data']->base_url . $saveInDb['data']->file_url;
+        if (app()->isLocal()) {
+            $getFullPath = $saveInDb['data']->base_url . $saveInDb['data']->file_url;
+        } else {
+            $getFullPath = $saveInDb['data']->base_url . 'storage/' . $saveInDb['data']->file_url;
+        }
         return response()->json([
             'status' => 200,
             'message' => 'PDF generated successfully.',
