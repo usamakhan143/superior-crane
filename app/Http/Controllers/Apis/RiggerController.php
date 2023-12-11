@@ -126,6 +126,11 @@ class RiggerController extends Controller
                             }
                         }
 
+                        // Update isRigger field in Job Model to indicate that Rigger Ticket is Attached with the Job.
+                        Job::where('id', $add_riggertik->job_id)->update([
+                            'is_rigger' => 1
+                        ]);
+
                         if ($request->isPayDuty != 0) {
                             $add_payduty = new Payduty();
                             $add_payduty->date = $request->pdDate;
