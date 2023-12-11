@@ -6,8 +6,10 @@ use App\Helpers\Fileupload;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\PdfRequest;
+use App\Mail\PdfEmail;
 use App\Models\Apis\Job;
 use App\Models\Apis\Rigger;
+use Illuminate\Support\Facades\Mail;
 use PDF;
 
 class PdfController extends Controller
@@ -40,6 +42,7 @@ class PdfController extends Controller
         }
         // Add this URL to the rigger PDF field in Job Model.
         Job::where('id', $data->job_id)->update(['pdf_rigger' => $getFullPath]);
+
         return response()->json([
             'status' => 200,
             'message' => 'PDF generated successfully.',
@@ -48,5 +51,13 @@ class PdfController extends Controller
     }
 
     // Send to Email: Rigger & Payduty PDF
+    public function sendToEmail($id)
+    {
+        Mail::to('usamaoff796@gmail.com')->send(new PdfEmail($pdfPath));
 
+        return response()->json([
+            'status' => 200,
+            'message' => 'Email sent with attachement successfully.'
+        ]);
+    }
 }

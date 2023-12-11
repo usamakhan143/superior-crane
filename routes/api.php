@@ -50,3 +50,5 @@ Route::get('rigger-tickets/{email}', [RiggerController::class, 'getRiggerTickets
 
 // Generate PDFs
 Route::get('pdf/{id}', [PdfController::class, 'generatePdf']);
+// Send PDF to email
+Route::get('send-email/{id}', [PdfController::class, 'sendToEmail']);
