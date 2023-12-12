@@ -23,4 +23,8 @@ class Rigger extends Model
     {
         return $this->hasOne(Payduty::class, 'rigger_id');
     }
+
+    public function getRiggerPayduty() {
+        return $this->hasOne(File::class, 'rigger_id')->where('file_type', 'riggerpayduty-pdf');
+    }
 }

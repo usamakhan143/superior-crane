@@ -29,10 +29,9 @@ class PdfEmail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.pdf_email')
-            ->attach($this->pdfPath, [
-                'as' => 'document.pdf',
-                'mime' => 'application/pdf',
-            ]);
+        return $this->subject('Rigger Ticket')->view('emails.pdf_email')->attach($this->pdfPath, [
+                    'as' => 'name.pdf',
+                    'mime' => 'application/pdf',
+                    ]);
     }
 }
