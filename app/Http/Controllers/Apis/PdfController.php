@@ -60,7 +60,7 @@ class PdfController extends Controller
 
         $getRiggerTicket = Rigger::where('id', $riggerId)->first();
         $getRiggerTicketPdfId = Rigger::where('id', 25)->first()->getRiggerPayduty->id ?? null;
-        if($getRiggerTicketPdfId != null) {
+        if ($getRiggerTicketPdfId != null) {
             if (app()->isLocal()) {
                 $pdfPath = $getRiggerTicket->getRiggerPayduty->base_url . $getRiggerTicket->getRiggerPayduty->file_url;
             } else {
@@ -70,13 +70,12 @@ class PdfController extends Controller
             try {
                 // Mail::to('hayashahid13dec@gmail.com')->send(new PdfEmail($pdfPath));
                 $data["email"] = "hayashahid13dec@gmail.com";
-                Mail::send('emails.pdf_email', $data, function($message)use($data, $pdfPath) {
+                Mail::send('emails.pdf_email', $data, function ($message) use ($data, $pdfPath) {
                     $message->to($data["email"])
-                            ->subject('Rigger Ticket');
-                            $message->attach($pdfPath);           
+                        ->subject('Rigger Ticket');
+                    $message->attach($pdfPath);
                 });
-            }
-            catch(Swift_TransportException $e){
+            } catch (Swift_TransportException $e) {
                 return response()->json([
                     'status' => 404,
                     'error' => $e->getMessage(),
@@ -84,8 +83,7 @@ class PdfController extends Controller
                     'link' => 'No PDF Found'
                 ], 404);
             }
-        }
-        else {
+        } else {
             return response()->json([
                 'status' => 404,
                 'message' => 'Email Not send.',
@@ -93,7 +91,7 @@ class PdfController extends Controller
                 'email' => $email
             ], 404);
         }
-        
+
 
         return response()->json([
             'status' => 200,
