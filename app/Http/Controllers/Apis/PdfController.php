@@ -62,19 +62,13 @@ class PdfController extends Controller
         $getRiggerTicketPdfId = Rigger::where('id', 25)->first()->getRiggerPayduty->id ?? null;
         if ($getRiggerTicketPdfId != null) {
             if (app()->isLocal()) {
-                $pdfPath = $getRiggerTicket->getRiggerPayduty->base_url . $getRiggerTicket->getRiggerPayduty->file_url;
+                $pdfPath = public_path($getRiggerTicket->getRiggerPayduty->file_url);
             } else {
-                $pdfPath = $getRiggerTicket->getRiggerPayduty->base_url . 'storage/' . $getRiggerTicket->getRiggerPayduty->file_url;
+                $pdfPath = storage_path($getRiggerTicket->getRiggerPayduty->file_url);
             }
             // Try sending an email and handle exceptions
             try {
-                // Mail::to('hayashahid13dec@gmail.com')->send(new PdfEmail($pdfPath));
-                $data["email"] = "hayashahid13dec@gmail.com";
-                Mail::send('emails.pdf_email', $data, function ($message) use ($data, $pdfPath) {
-                    $message->to($data["email"])
-                        ->subject('Rigger Ticket');
-                    $message->attach($pdfPath);
-                });
+                Mail::to('hayashahid13dec@gmail.com')->send(new PdfEmail($pdfPath));
             } catch (Swift_TransportException $e) {
                 return response()->json([
                     'status' => 404,
@@ -86,18 +80,16 @@ class PdfController extends Controller
         } else {
             return response()->json([
                 'status' => 404,
-                'message' => 'Email Not send.',
-                'link' => 'No PDF Found',
-                'email' => $email
+                'message' => 'Email Not send No PDF found.',
+                'recipent' => $email
             ], 404);
         }
 
 
         return response()->json([
-            'status' => 200,
+            'status' => $pdfPath,
             'message' => 'Email sent with attachement successfully.',
-            'link' => $pdfPath,
-            'email' => $email
+            'recipent' => $email
         ]);
     }
 }

@@ -30,7 +30,6 @@ class PdfEmail extends Mailable
     public function build()
     {
         return $this->subject('Rigger Ticket')->view('emails.pdf_email')->attach($this->pdfPath, [
-            'as' => 'name.pdf',
             'mime' => 'application/pdf',
         ]);
     }
