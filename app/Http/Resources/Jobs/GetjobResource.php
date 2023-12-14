@@ -31,7 +31,7 @@ class GetjobResource extends JsonResource
             'statusCode' => $this->status_code,
             'isSCCI' => $this->is_scci,
             'pdfRigger' => $this->pdf_rigger,
-            'pdf_transportation' => $this->pdf_transportation,
+            'pdfTransportation' => $this->pdf_transportation,
             'isTransportationFilled' => $this->is_transportation,
             'isRiggerFilled' => $this->is_rigger,
         ];

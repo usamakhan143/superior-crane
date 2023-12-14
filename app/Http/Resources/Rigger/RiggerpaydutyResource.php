@@ -15,6 +15,7 @@ class RiggerpaydutyResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'specificationsAndRemarks' => $this->specificationsAndRemarks,
             'customer' => $this->customer,
             'location' => $this->location,
@@ -58,7 +59,7 @@ class RiggerpaydutyResource extends JsonResource
         if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
              return $image['base_url'] . $image['file_url'];
         } else {
-            return $image['base_url'] . $image['file_url'];
+            return $image['base_url'] . 'storage/' . $image['file_url'];
         }
     }
 

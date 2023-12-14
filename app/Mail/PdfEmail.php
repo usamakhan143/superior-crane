@@ -12,14 +12,16 @@ class PdfEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $pdfPath;
+    public $data;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($pdfPath)
+    public function __construct($data)
     {
-        $this->pdfPath = $pdfPath;
+        $this->pdfPath = $data['pdf'];
+        $this->data = $data['data'];
     }
 
     /**

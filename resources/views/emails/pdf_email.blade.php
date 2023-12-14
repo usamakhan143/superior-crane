@@ -1,73 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: red;
-        }
-
-        .otp-container {
-            background-color: red;
-            color: #ffffff;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            border-radius: 5px;
-            margin-bottom: 30px;
-        }
-
-        .otp-container p {
-            color: #ffffff;
-        }
-
-        .footer {
-            text-align: center;
-            color: #95a5a6;
-        }
-    </style>
+    <title>Rigger Ticket Attachment</title>
 </head>
+<style>
+    .text {
+        color: black !important;
+    }
+</style>
+<body style="font-family: Arial, sans-serif;">
 
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>OTP Verification</h1>
-        </div>
+    <p class="text">Hello,</p>
 
-        <div class="otp-container">
-            <p>Your One-Time Password (OTP) is:</p>
-            <strong>No OTP</strong>
-        </div>
+    <p class="text">Please find attached the Rigger Ticket for your reference.</p>
 
-        <div class="footer">
-            <p>This email was sent to you as part of the OTP verification process. If you did not request this, please
-                ignore this email.</p>
-        </div>
-    </div>
+    <p class="text">
+        <a href="{{ app()->isLocal() ? $data->getRiggerPayduty->base_url . $data->getRiggerPayduty->file_url : $data->getRiggerPayduty->base_url .'storage/'. $data->getRiggerPayduty->file_url }}" style="padding: 10px 20px; background-color: #EE3A43; color: #ffffff; text-decoration: none; border-radius: 5px;">View Rigger Ticket</a>
+    </p>
+
+    <p class="text">Thanks,<br>{{ config('app.name') }}</p>
+
 </body>
-
 </html>
