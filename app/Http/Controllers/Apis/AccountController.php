@@ -40,14 +40,14 @@ class AccountController extends Controller
             $r_data = new AccountResource($add_user);
             return response()->json([
                 'status' => 200,
-                'message' => 'User added successfully.',
+                'message' => 'Registration successfull.',
                 'data' => $r_data
             ]);
         } else {
             return response()->json([
                 'status' => 404,
                 'message' => 'Something went wrong.'
-            ]);
+            ], 404);
         }
     }
 
@@ -88,13 +88,13 @@ class AccountController extends Controller
                     return response()->json([
                         'status' => 404,
                         'message' => 'Something went wrong.'
-                    ]);
+                    ], 404);
                 }
             } else {
                 return response()->json([
                     'status' => 404,
                     'message' => 'No data requested to update.'
-                ]);
+                ], 404);
             }
         } else {
             return response()->json([
@@ -114,7 +114,7 @@ class AccountController extends Controller
             if ($del_user) {
                 return response()->json([
                     'status' => 200,
-                    'message' => 'User deleted successfully.'
+                    'message' => 'Registration deleted successfully.'
                 ]);
             }
         } else {

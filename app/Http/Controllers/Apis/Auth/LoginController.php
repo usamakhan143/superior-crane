@@ -18,6 +18,7 @@ class LoginController extends Controller
         $this->appRoles = Helper::getRoles();
     }
 
+    // Mobile Sign In
     public function mobile_sign_in(LoginRequest $request)
     {
         $email = $request->email;
@@ -50,7 +51,7 @@ class LoginController extends Controller
             } else {
                 return response()->json([
                     'status' => 404,
-                    'message' => 'You are disabled, contact admins for more information.'
+                    'message' => 'You are disabled, contact admins for any concern.'
                 ], 404);
             }
         } else {

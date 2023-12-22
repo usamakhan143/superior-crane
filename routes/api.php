@@ -5,6 +5,7 @@ use App\Http\Controllers\Apis\Auth\PasswordResetController;
 use App\Http\Controllers\Apis\JobController;
 use App\Http\Controllers\Apis\PdfController;
 use App\Http\Controllers\Apis\RiggerController;
+use App\Http\Controllers\Apis\TransportationController;
 use App\Mail\SendOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -52,3 +53,6 @@ Route::get('rigger-tickets/{email}', [RiggerController::class, 'getRiggerTickets
 Route::get('pdf/{id}', [PdfController::class, 'generatePdf']);
 // Send PDF to email
 Route::post('send-email', [PdfController::class, 'sendToEmail']);
+
+// Transportation Ticket
+Route::post('transportation-ticket', [TransportationController::class, 'createTicket']);
