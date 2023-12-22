@@ -21,6 +21,7 @@ class CreateTransportationsTable extends Migration
             $table->string('billingAddress');
             $table->string('TimeIn');
             $table->string('TimeOut');
+            $table->string('notes');
             $table->string('specialInstructionsForJobNumber');
             $table->string('poNumber');
             $table->string('specialInstructionsForPoNumber');
@@ -44,6 +45,7 @@ class CreateTransportationsTable extends Migration
             $table->string('customerDate');
             $table->string('customerTimeIn');
             $table->string('customerTimeOut');
+            $table->string('customerEmail');
             $table->integer('signaturesLeft');
             $table->boolean('isDraft');
             $table->integer('job_id');
