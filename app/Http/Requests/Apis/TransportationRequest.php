@@ -41,21 +41,44 @@ class TransportationRequest extends FormRequest
             'dateforshipper' => 'string',
             'timeInforshipper' => 'string',
             'timeOutforshipper' => 'string',
-            'pickUpDriverName' => 'string',
+            'pickUpDriverName' => 'required|string',
             'signaturefordriver' => 'file|mimes:jpg,png,jpeg',
-            'datefordriver' => 'date',
-            'timeInfordriver' => 'string',
-            'timeOutfordriver' => 'string',
-            'customerName' => 'string',
-            'customerEmail' => 'email',
+            'datefordriver' => 'required|date',
+            'timeInfordriver' => 'required|string',
+            'timeOutfordriver' => 'required|string',
+            'customerName' => 'required|string',
+            'customerEmail' => 'required|email',
             'signatureforcustomer' => 'file|mimes:jpg,png,jpeg',
-            'dateforcustomer' => 'string',
-            'timeInforcustomer' => 'string',
-            'timeOutforcustomer' => 'string',
+            'dateforcustomer' => 'required|date',
+            'timeInforcustomer' => 'required|string',
+            'timeOutforcustomer' => 'required|string',
             'imageFiles.*' => 'file|mimes:jpg,png,jpeg',
-            'isDraft' => 'required|boolean',
             'userId' => 'required|numeric|exists:accounts,id',
             'jobId' => 'required|numeric|exists:jobs,id'
         ];
+    }
+
+    public function messages()
+    {
+        return [
+            'datefordriver.required' => 'The driver date field is required.',
+            'timeInfordriver.required' => 'The driver time-in field is required.',
+            'timeOutfordriver.required' => 'The driver time-out field is required.',
+            'dateforcustomer.required' => 'The customer date field is required.',
+            'timeInforcustomer.required' => 'The customer time-in field is required.',
+            'timeOutforcustomer.required' => 'The customer time-out field is required.',
+            'jobId.required' => 'The job number is required. Please select the job.'
+        ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        $response = response()->json([
+            'status' => 422,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors(),
+        ], 422);
+
+        throw new \Illuminate\Validation\ValidationException($validator, $response);
     }
 }
