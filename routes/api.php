@@ -46,6 +46,7 @@ Route::get('delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@dele
 Route::get('jobs', [JobController::class, 'get_jobs']);
 Route::post('create-job', [JobController::class, 'create_job']);
 Route::put('edit-job/{id}', [JobController::class, 'update_job']);
+Route::get('job-selector/{isScci?}', [JobController::class, 'getJobNumbers']);
 
 // Rigger Ticket
 Route::post('rigger-ticket', [RiggerController::class, 'create_ticket']);

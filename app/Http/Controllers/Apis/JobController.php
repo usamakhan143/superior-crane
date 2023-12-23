@@ -247,4 +247,36 @@ class JobController extends Controller
             ], 401);
         }
     }
+
+
+    // This API is for the mobile app. Used in select job dropdown inside both forms.
+    public function getJobNumbers($isScci = null)
+    {
+        if ($isScci != null) {
+            $all_jobs = Job::where([
+                ['is_scci', $isScci],
+                ['is_transportation', 0],
+                ['is_rigger', 0],
+            ])->get(['id', 'job_number']);
+
+            $r_data = [];
+
+            foreach ($all_jobs as $job) {
+                $r_data[] = [
+                    'jobId' => $job->id,
+                    'jobNumber' => $job->job_number
+                ];
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => $r_data
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'isScci is required as a parameter after the endpoint.'
+            ], 404);
+        }
+    }
 }
