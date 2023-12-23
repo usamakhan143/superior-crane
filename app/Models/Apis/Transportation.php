@@ -8,4 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Transportation extends Model
 {
     use HasFactory;
+
+    public function customerSignature()
+    {
+        return $this->hasOne(File::class, 'transportation_id')->where('file_type', 'customer-signature');
+    }
+
+    public function driverSignature()
+    {
+        return $this->hasOne(File::class, 'transportation_id')->where('file_type', 'driver-signature');
+    }
+
+    public function shipperSignature()
+    {
+        return $this->hasOne(File::class, 'transportation_id')->where('file_type', 'shipper-signature');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(File::class, 'transportation_id')->where('file_type', 'transportation-gallery');
+    }
 }

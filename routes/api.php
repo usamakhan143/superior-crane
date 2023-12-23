@@ -55,4 +55,5 @@ Route::get('pdf/{id}', [PdfController::class, 'generatePdf']);
 Route::post('send-email', [PdfController::class, 'sendToEmail']);
 
 // Transportation Ticket
+Route::get('transportations', [TransportationController::class, 'getTickets']);
 Route::post('transportation-ticket', [TransportationController::class, 'createTicket']);

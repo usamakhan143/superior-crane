@@ -23,4 +23,9 @@ class File extends Model
     {
         return $this->belongsTo(Job::class, 'payduty_id');
     }
+
+    public function transportation_ticket()
+    {
+        return $this->belongsTo(Job::class, 'transportation_id');
+    }
 }
