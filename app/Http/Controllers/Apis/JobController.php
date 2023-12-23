@@ -12,6 +12,7 @@ use App\Http\Resources\Jobs\GetjobResource;
 use App\Models\Apis\Auth\Account;
 use App\Models\Apis\File;
 use App\Models\Apis\Job;
+use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
@@ -23,9 +24,64 @@ class JobController extends Controller
     }
 
     // Get all Jobs
-    public function get_jobs()
+    public function get_jobs(Request $request)
     {
-        $all_jobs = Job::get();
+        // Get the query params.
+        $queryParams = $request->all();
+        $query = Job::query();
+
+        // Apply filters based on all query parameters
+        foreach ($queryParams as $field => $value) {
+            // Skip non-filterable parameters, adjust as needed
+            if (!in_array($field, ['jobNumber', 'clientName', 'jobDate', 'riggerAssigned', 'supplierName', 'enterBy', 'jobId', 'statusCode', 'isSCCI', 'isTransportationFilled', 'isRiggerFilled', 'userId'])) {
+                continue;
+            }
+
+            // Map 'userId' to 'account_id' if the field is 'userId'
+            if ($field === 'userId') {
+                $field = 'account_id';
+            }
+            // Map 'jobId' to 'job_id' if the field is 'jobId'
+            if ($field === 'jobId') {
+                $field = 'id';
+            }
+            if ($field === 'jobNumber') {
+                $field = 'job_number';
+            }
+            if ($field === 'clientName') {
+                $field = 'client_name';
+            }
+            if ($field === 'jobDate') {
+                $field = 'job_date';
+            }
+            if ($field === 'riggerAssigned') {
+                $field = 'rigger_assigned';
+            }
+            if ($field === 'supplierName') {
+                $field = 'supplier_name';
+            }
+            if ($field === 'enterBy') {
+                $field = 'enter_by';
+            }
+            if ($field === 'statusCode') {
+                $field = 'status_code';
+            }
+            if ($field === 'isSCCI') {
+                $field = 'is_scci';
+            }
+            if ($field === 'isTransportationFilled') {
+                $field = 'is_transportation';
+            }
+            if ($field === 'isRiggerFilled') {
+                $field = 'is_rigger';
+            }
+
+            // Apply condition to the query
+            $query->where($field, 'like', "%$value%");
+        }
+
+        // Fetch the records
+        $all_jobs = $query->get();
         $r_data = GetjobResource::collection($all_jobs);
         return response()->json([
             'status' => 200,
