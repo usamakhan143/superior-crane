@@ -24,47 +24,54 @@ class RiggerController extends Controller
         $this->appRoles = Helper::getRoles();
     }
 
-    public function getRiggerTickets($email, Request $request)
+    public function getRiggerTickets($id = null, Request $request)
     {
-        $userRole = Account::where('email', $email)->value('role');
-        if ($userRole == $this->appRoles['sa'] || $userRole == $this->appRoles['a']) {
+        if ($id != null) {
+            $userRole = Account::where('id', $id)->value('role');
+            if ($userRole == $this->appRoles['sa'] || $userRole == $this->appRoles['a']) {
 
-            // Get the query params.
-            $queryParams = $request->all();
-            $query = Rigger::query();
+                // Get the query params.
+                $queryParams = $request->all();
+                $query = Rigger::query();
 
-            // Apply filters based on all query parameters
-            foreach ($queryParams as $field => $value) {
-                // Skip non-filterable parameters, adjust as needed
-                if (!in_array($field, ['customer', 'poNumber', 'id', 'date', 'rating', 'emailAddress', 'jobId', 'isPayDuty', 'ticketNumber', 'userId'])) {
-                    continue;
+                // Apply filters based on all query parameters
+                foreach ($queryParams as $field => $value) {
+                    // Skip non-filterable parameters, adjust as needed
+                    if (!in_array($field, ['customer', 'poNumber', 'id', 'date', 'rating', 'emailAddress', 'jobId', 'isPayDuty', 'ticketNumber', 'userId'])) {
+                        continue;
+                    }
+
+                    // Map 'userId' to 'account_id' if the field is 'userId'
+                    if ($field === 'userId') {
+                        $field = 'account_id';
+                    }
+                    // Map 'jobId' to 'job_id' if the field is 'jobId'
+                    if ($field === 'jobId') {
+                        $field = 'job_id';
+                    }
+
+                    // Apply condition to the query
+                    $query->where($field, 'like', "%$value%");
                 }
 
-                // Map 'userId' to 'account_id' if the field is 'userId'
-                if ($field === 'userId') {
-                    $field = 'account_id';
-                }
-                // Map 'jobId' to 'job_id' if the field is 'jobId'
-                if ($field === 'jobId') {
-                    $field = 'job_id';
-                }
-
-                // Apply condition to the query
-                $query->where($field, 'like', "%$value%");
+                // Fetch the records
+                $get_tickets = $query->get();
+                $r_data = RiggerResource::collection($get_tickets);
+                return response()->json([
+                    'status' => 200,
+                    'data' => $r_data
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'You are not authorized for this action.'
+                ], 401);
             }
-
-            // Fetch the records
-            $get_tickets = $query->get();
-            $r_data = RiggerResource::collection($get_tickets);
-            return response()->json([
-                'status' => 200,
-                'data' => $r_data
-            ], 200);
         } else {
             return response()->json([
-                'status' => 401,
-                'message' => 'You are not authorized for this action.'
-            ], 401);
+                'status' => 404,
+                'message' => 'Admin or super admin email is required as a parameter after the endpoint.'
+            ], 404);
         }
     }
 

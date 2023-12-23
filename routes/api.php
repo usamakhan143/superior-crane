@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Apis\AccountController;
 use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\PasswordResetController;
 use App\Http\Controllers\Apis\JobController;
@@ -36,6 +37,7 @@ Route::post('verify-otp', [PasswordResetController::class, 'verifyOtp']);
 Route::post('update-password', [PasswordResetController::class, 'updatePassword']);
 
 // User CRUD
+Route::get('users/{id?}', [AccountController::class, 'getUsers']);
 Route::post('create-user', 'App\Http\Controllers\Apis\AccountController@create_user');
 Route::put('edit-user/{id}', 'App\Http\Controllers\Apis\AccountController@update_user');
 Route::get('delete-user/{id}', 'App\Http\Controllers\Apis\AccountController@delete_user');
@@ -47,7 +49,7 @@ Route::put('edit-job/{id}', [JobController::class, 'update_job']);
 
 // Rigger Ticket
 Route::post('rigger-ticket', [RiggerController::class, 'create_ticket']);
-Route::get('rigger-tickets/{email}', [RiggerController::class, 'getRiggerTickets']);
+Route::get('rigger-tickets/{id?}', [RiggerController::class, 'getRiggerTickets']);
 
 // Generate PDFs
 Route::get('pdf/{id}', [PdfController::class, 'generatePdf']);

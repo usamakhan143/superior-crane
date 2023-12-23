@@ -2,16 +2,68 @@
 
 namespace App\Http\Controllers\Apis;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\Auth\AccountRequest;
 use App\Http\Requests\Apis\Auth\UpdateAccountRequest;
 use App\Http\Resources\AccountResource;
 use Illuminate\Support\Str;
 use App\Models\Apis\Auth\Account;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
+    private $appRoles;
+
+    public function __construct()
+    {
+        $this->appRoles = Helper::getRoles();
+    }
+
+    // Get Users
+    public function getUsers(Request $request, $id = null)
+    {
+        if ($id != null) {
+            $userRole = Account::where('id', $id)->value('role');
+            if ($userRole == $this->appRoles['sa'] || $userRole == $this->appRoles['a']) {
+
+                // Get the query params.
+                $queryParams = $request->all();
+                $query = Account::query();
+
+                // Apply filters based on all query parameters
+                foreach ($queryParams as $field => $value) {
+                    // Skip non-filterable parameters, adjust as needed
+                    if (!in_array($field, ['name', 'email', 'id', 'role', 'status'])) {
+                        continue;
+                    }
+
+                    // Apply condition to the query
+                    $query->where($field, 'like', "%$value%");
+                }
+
+                // Fetch the records
+                $getAllUsers = $query->get();
+                $r_data = AccountResource::collection($getAllUsers);
+                return response()->json([
+                    'status' => 200,
+                    'data' => $r_data
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'You are not authorized for this action.'
+                ], 401);
+            }
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Admin or super admin email is required as a parameter after the endpoint.'
+            ], 404);
+        }
+    }
+
     // Create User
     public function create_user(AccountRequest $request)
     {
