@@ -10,6 +10,7 @@ use App\Http\Resources\Transportation\TransportationResource;
 use App\Models\Apis\Auth\Account;
 use App\Models\Apis\Job;
 use App\Models\Apis\Transportation;
+use Illuminate\Http\Request;
 
 class TransportationController extends Controller
 {
@@ -20,10 +21,35 @@ class TransportationController extends Controller
         $this->appRoles = Helper::getRoles();
     }
 
-    public function getTickets()
+    public function getTickets(Request $request)
     {
-        $all_tickets = Transportation::get();
-        $r_data = TransportationResource::collection($all_tickets);
+        // Get the query params.
+        $queryParams = $request->all();
+        $query = Transportation::query();
+
+        // Apply filters based on all query parameters
+        foreach ($queryParams as $field => $value) {
+            // Skip non-filterable parameters, adjust as needed
+            if (!in_array($field, ['ticketNumber', 'poNumber', 'id', 'siteContactName', 'siteContactNumber', 'isDraft', 'jobId', 'signaturesLeft', 'customerEmail', 'customerDate', 'customerName', 'shipperDate', 'userId'])) {
+                continue;
+            }
+
+            // Map 'userId' to 'account_id' if the field is 'userId'
+            if ($field === 'userId') {
+                $field = 'account_id';
+            }
+            // Map 'jobId' to 'job_id' if the field is 'jobId'
+            if ($field === 'jobId') {
+                $field = 'job_id';
+            }
+
+            // Apply condition to the query
+            $query->where($field, 'like', "%$value%");
+        }
+
+        // Fetch the records
+        $transportations = $query->get();
+        $r_data = TransportationResource::collection($transportations);
         return response()->json([
             'status' => 200,
             'data' => $r_data
