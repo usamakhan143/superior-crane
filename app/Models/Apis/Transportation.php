@@ -28,4 +28,9 @@ class Transportation extends Model
     {
         return $this->hasMany(File::class, 'transportation_id')->where('file_type', 'transportation-gallery');
     }
+
+    public function job()
+    {
+        return $this->belongsTo(Job::class, 'job_id');
+    }
 }

@@ -135,170 +135,155 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="second-sec">
-            <div class="child-second-sec"></div>
-            <div class="child-second-sec">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>SPECIFICATIONS AND REMARKS:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                {{-- {{ $data->specificationsAndRemarks }} --}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="third-content">
+    <!-- <div class="third-content">
         <p class="alert">
             TERMS: NET 30 DAVS FROM DATE OF INVOICE: Overdue accounts charged at 2%
             per month - 24% per year
         </p>
-    </div>
-    <!-- 1ST ROW -->
-    <table>
-        <thead>
-            <tr>
-                <th>CUSTOMER</th>
-                <th>LOCATION</th>
-                <th>P.O. NUMBER</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    {{-- {{ $data->customer }} --}}
-                </td>
-                <td>
-                    {{-- {{ $data->location }} --}}
-                </td>
-                <td>
-                    {{-- {{ $data->poNumber }} --}}
-                </td>
-            </tr>
-            <!-- Add more data rows as needed -->
-        </tbody>
-    </table>
-    <!--2ND ROW-->
-    <table>
-        <thead>
-            <tr>
-                <th>DATE</th>
-                <th>LEAVE YARD</th>
-                <th>START JOB</th>
-                <th>FINISH JOB</th>
-                <th>ARRIVAL YARD</th>
-                <th>LUNCH</th>
-                <th>TRAVEL TIME</th>
-                <th>CRANE TIME</th>
-                <th>TOTAL HOURS</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ $data->date }}</td>
-                <td>{{ $data->leaveYard }}</td>
-                <td>{{ $data->startJob }}</td>
-                <td>{{ $data->finishJob }}</td>
-                <td>{{ $data->arrivalYard }}</td>
-                <td>{{ $data->lunch }}</td>
-                <td>{{ $data->travelTime }}</td>
-                <td>{{ $data->craneTime }}</td>
-                <td>{{ $data->totalHours }}</td>
-            </tr>
-            <!-- Add more data rows as needed -->
-        </tbody>
-    </table>
-    <!-- 3RD ROW-->
-    <table>
-        <thead>
-            <tr>
-                <th>CRANE NUMBER</th>
-                <th>RATING</th>
-                <th>BOOM LENGTH</th>
-                <th>OPERATOR</th>
-                <th>OTHER EQUIPMENT</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ $data->craneNumber }}</td>
-                <td>{{ $data->rating }}</td>
-                <td>{{ $data->boomLength }}</td>
-                <td>{{ $data->operation }}</td>
-                <td>{{ $data->otherEquipment }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <table>
-        <thead>
-            <tr>
-                <th>NOTES/OTHER:</th>
-                <th>SIGNATURE</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    {{ $data->notesOthers }}
-                </td>
-                <td>
-                    <img src='{{ $data->signature->file_url }}' width="100px" />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    </div> -->
 
-    @if ($data->isPayDuty != 0)
-        <div>
-            <h3 class="second-form">PayDuty</h3>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th>PICKUP ADDRESS</th>
+                <th>BILLING ADDRESS</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ $data->pickupAddress }}</td>
+                <td>{{ $data->billingAddress }}</td>
+                <td>{{ $data->TimeIn }}</td>
+                <td>{{ $data->TimeOut }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ $data->notes }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Special Instructions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Job Number</td>
+                <td>{{ $data->job->job_number }}</td>
+                <td>{{ $data->specialInstructionsForJobNumber }}</td>
+            </tr>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>DATE</th>
-                    <th>LOCATION</th>
-                    <th>START TIME</th>
-                    <th>FINISH TIME</th>
-                    <th>TOTAL HOURS</th>
-                    <th>OFFICER</th>
-                    <th>OFFICER NAME</th>
-                    <th>DIVISION</th>
-                    <th>SIGNATURE</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ $data->payDuty->date }}</td>
-                    <td>{{ $data->payDuty->location }}</td>
-                    <td>{{ $data->payDuty->startTime }}</td>
-                    <td>{{ $data->payDuty->finishTime }}</td>
-                    <td>{{ $data->payDuty->totalHours }}</td>
-                    <td>{{ $data->payDuty->officer }}</td>
-                    <td>{{ $data->payDuty->officerName }}</td>
-                    <td>{{ $data->payDuty->division }}</td>
-                    <td><img src='{{ $data->payDuty->signature->file_url }}' width="100px" /></td>
-                </tr>
-            </tbody>
-        </table>
-    @endif
+            <tr>
+                <td>PO #</td>
+                <td>{{ $data->poNumber }}</td>
+                <td>{{ $data->specialInstructionsForPoNumber }}</td>
+            </tr>
+
+            <tr>
+                <td>Site Contact Name</td>
+                <td>{{ $data->siteContactName }}</td>
+                <td>{{ $data->specialInstructionsForSiteContactName }}</td>
+            </tr>
+
+            <tr>
+                <td>Site Contact Number</td>
+                <td>{{ $data->siteContactNumber }}</td>
+                <td>{{ $data->specialInstructionsForSiteContactNumber }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Signature</th>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Shipper</td>
+                <td>{{ $data->shipperName }}</td>
+                <td>
+                    @if ($data->shipperSignature->file_url ?? 0 != 0)
+                        <img src="{{ $data->shipperSignature->file_url ?? '-' }}" width="100px" />
+                    @else
+                        -
+                    @endif
+                </td>
+                <td>{{ $data->shipperDate }}</td>
+                <td>{{ $data->shipperTimeIn }}</td>
+                <td>{{ $data->shipperTimeOut }}</td>
+            </tr>
+
+            <tr>
+                <td>Customer</td>
+                <td>{{ $data->customerName }}</td>
+                <td>
+                    @if ($data->customerSignature->file_url ?? 0 != 0)
+                        <img src="{{ $data->customerSignature->file_url ?? '-' }}" width="100px" />
+                    @else
+                        -
+                    @endif
+                </td>
+                <td>{{ $data->customerDate }}</td>
+                <td>{{ $data->customerTimeIn }}</td>
+                <td>{{ $data->customerTimeOut }}</td>
+            </tr>
+
+            <tr>
+                <td>Driver</td>
+                <td>{{ $data->pickupDriverName }}</td>
+                <td>
+                    @if ($data->driverSignature->file_url ?? 0 != 0)
+                        <img src="{{ $data->driverSignature->file_url ?? '-' }}" width="100px" />
+                    @else
+                        -
+                    @endif
+                </td>
+                <td>{{ $data->pickupDriverDate }}</td>
+                <td>{{ $data->pickupDriverTimeIn }}</td>
+                <td>{{ $data->pickupDriverTimeOut }}</td>
+            </tr>
+
+        </tbody>
+    </table>
     <p class="alert-footer">
-        Customer agrees should the grounds or site be unfit or blocked by
-        obstructions and the machine operator is instructed to proceed by customer
-        or agent, the customer and agent assume full liability for damages to the
-        machine and the surrounding grounds, buildings and materials. Customer
-        shall pay any overtime charges incurred for operators in accordance with
-        our union contract, if applicable. Fuel surcharges may be adjusted from
-        time to time without notice. The undersigned acknowledges that the above
-        services were received and performed to satisfaction by Superior Crane.
+        Disclaimer: The shipper, upon tendering the shipment to the carrier, and the consignee, upon accepting the
+        delivery of the shipment, shall be jointly and severally liable for all unpaid charges of the said shipment in
+        accordance with applicable tariffs, including but not limited to sums advanced or disbursed by SCCI Logistics
+        regarding the said shipment.
+
+        Specialized equipment requires assembly/disassembly on-site. This service will be provided at the
+        shipper's/receiver's expense. SCCI Logistics is not responsible for any crane and/or other third-party detention
+        costs incurred due to varying weather conditions, equipment breakdowns, permit approvals, and/or police escort
+        delays unless expressly stated in the quotation.
+
+        Utilities, bridge surveys/evaluations, port charges, and all civil engineering are extra unless expressly stated
+        in the quotation and will be billed upon payment being requested from SCCI Logistics by all third parties as an
+        extra at cost plus 15%.
+
+        Unless expressly stated in this quotation, loading and offloading will be the responsibility of the Customer,
+        Shipper, Consignee, and/or others.
     </p>
 </body>
 

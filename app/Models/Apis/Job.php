@@ -11,6 +11,11 @@ class Job extends Model
 
     public function images()
     {
-        return $this->hasMany(File::class, 'job_id')->where('file_type', 'job-gallery');;
+        return $this->hasMany(File::class, 'job_id')->where('file_type', 'job-gallery');
+    }
+
+    public function transportationTicket()
+    {
+        return $this->hasOne(Transportation::class, 'job_id');
     }
 }

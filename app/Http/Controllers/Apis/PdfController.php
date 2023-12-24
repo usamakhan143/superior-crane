@@ -16,7 +16,7 @@ use Swift_TransportException;
 
 class PdfController extends Controller
 {
-    public function generatePdf($id, $isRigger)
+    public function generatePdf($id, $isRigger = false)
     {
         $pdfOptions = [
             'dpi' => 150,
@@ -65,7 +65,6 @@ class PdfController extends Controller
 
             $pdf = PDF::loadView('pdf.transportation', ['data' => $data])->setPaper('A4', 'landscape')->setOption($pdfOptions);
 
-            return $pdf;
             // Saving PDF to the directory.
             $pdfData = [
                 'folder_name' => 'transportationtickets',
@@ -78,7 +77,6 @@ class PdfController extends Controller
 
             // Storing the PDF path inside the db.
             $saveInDb = Helper::addFile($pdfPath, $pdfData['file_type'], $pdfData['file_ext'], 0, $data->account_id, 0, $data->id, 0);
-
 
             // Setup the PDF path based on the enviroment.
             if (app()->isLocal()) {
