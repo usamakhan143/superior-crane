@@ -70,7 +70,7 @@ class RiggerController extends Controller
         } else {
             return response()->json([
                 'status' => 404,
-                'message' => 'Admin or super admin email is required as a parameter after the endpoint.'
+                'message' => 'Admin or super admin ID is required as a parameter after the endpoint.'
             ], 404);
         }
     }
