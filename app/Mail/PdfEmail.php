@@ -13,6 +13,7 @@ class PdfEmail extends Mailable
 
     public $pdfPath;
     public $data;
+    public $subject;
     /**
      * Create a new message instance.
      *
@@ -22,6 +23,7 @@ class PdfEmail extends Mailable
     {
         $this->pdfPath = $data['pdf'];
         $this->data = $data['data'];
+        $this->subject = $data['subject'];
     }
 
     /**
@@ -31,7 +33,7 @@ class PdfEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Rigger Ticket')->view('emails.pdf_email')->attach($this->pdfPath, [
+        return $this->subject($this->subject)->view('emails.pdf_email')->attach($this->pdfPath, [
             'mime' => 'application/pdf',
         ]);
     }

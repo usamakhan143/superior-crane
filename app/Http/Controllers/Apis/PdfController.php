@@ -98,47 +98,74 @@ class PdfController extends Controller
     }
 
     // Send to Email: Rigger & Payduty PDF
-    public function sendToEmail($email, $id)
+    public function sendToEmail($email, $id, $isRigger)
     {
         $riggerId = $id;
         $email = $email;
+        if ($isRigger === true) {
+            $getRiggerTicket = Rigger::where('id', $riggerId)->first();
+            $getRiggerTicketPdfId = Rigger::where('id', $riggerId)->first()->getRiggerPayduty->id ?? null;
+            if ($getRiggerTicketPdfId != null) {
+                if (app()->isLocal()) {
+                    $pdfPath = public_path($getRiggerTicket->getRiggerPayduty->file_url);
+                } else {
+                    $pdfPath = storage_path($getRiggerTicket->getRiggerPayduty->file_url);
+                }
 
-        $getRiggerTicket = Rigger::where('id', $riggerId)->first();
-        $getRiggerTicketPdfId = Rigger::where('id', $riggerId)->first()->getRiggerPayduty->id ?? null;
-        if ($getRiggerTicketPdfId != null) {
-            if (app()->isLocal()) {
-                $pdfPath = public_path($getRiggerTicket->getRiggerPayduty->file_url);
+                $data = [
+                    'data' => $getRiggerTicket,
+                    'pdf' => $pdfPath,
+                    'subject' => 'Rigger Ticket',
+                    'isRigger' => $isRigger
+                ];
             } else {
-                $pdfPath = storage_path($getRiggerTicket->getRiggerPayduty->file_url);
-            }
-
-            $data = [
-                'data' => $getRiggerTicket,
-                'pdf' => $pdfPath,
-            ];
-            // Try sending an email and handle exceptions
-            try {
-                Mail::to($email)->send(new PdfEmail($data));
-            } catch (Swift_TransportException $e) {
                 return response()->json([
                     'status' => 404,
-                    'message' => 'Email sending is disabled because the mailer is not configured to use SMTP.',
-                    'link' => 'No PDF Found'
+                    'message' => 'Email Not send No rigger PDF found.',
+                    'recipent' => $email
                 ], 404);
             }
         } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Email Not send No PDF found.',
-                'recipent' => $email
-            ], 404);
+            $getTransportationTicket = Transportation::where('id', $id)->first();
+            $getTransportationTicketPdfId = Transportation::where('id', $id)->first()->getTransportationTicketPdf->id ?? null;
+
+            if ($getTransportationTicketPdfId != null) {
+                if (app()->isLocal()) {
+                    $pdfPath = public_path($getTransportationTicket->getTransportationTicketPdf->file_url);
+                } else {
+                    $pdfPath = storage_path($getTransportationTicket->getTransportationTicketPdf->file_url);
+                }
+
+                $data = [
+                    'data' => $getTransportationTicket,
+                    'pdf' => $pdfPath,
+                    'subject' => 'Transportation Ticket',
+                    'isRigger' => $isRigger
+                ];
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Email Not send No transportation PDF found.',
+                    'recipent' => $email
+                ], 404);
+            }
         }
 
-        return response()->json([
+        // Try sending an email and handle exceptions
+        try {
+            Mail::to($email)->send(new PdfEmail($data));
+        } catch (Swift_TransportException $e) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Email sending is disabled because the mailer is not configured to use SMTP.',
+                'link' => 'No PDF Found'
+            ], 404);
+        }
+        return [
             'status' => 200,
             'message' => 'Email sent with attachement successfully.',
             'recipent' => $email
-        ]);
+        ];
     }
 
 
@@ -151,9 +178,9 @@ class PdfController extends Controller
         $pdfPath = $this->generatePdf($id, $isRigger);
 
         if ($pdfPath['status'] === 200) {
-            $success = $this->sendToEmail($email, $pdfPath['id']);
+            $success = $this->sendToEmail($email, $pdfPath['id'], $isRigger);
 
-            if ($success) {
+            if ($success['status'] === 200) {
                 return response()->json([
                     'status' => 200,
                     'message' => 'Email sent with attachment successfully.',
@@ -163,7 +190,7 @@ class PdfController extends Controller
             } else {
                 return response()->json([
                     'status' => 404,
-                    'message' => 'Email sending failed. Please check your email configuration.',
+                    'message' => 'Email sending failed.',
                     'recipient' => $email
                 ], 404);
             }
