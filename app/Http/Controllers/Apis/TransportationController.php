@@ -200,6 +200,7 @@ class TransportationController extends Controller
                         return response()->json([
                             'status' => 200,
                             'message' => 'Ticket submitted successfully.',
+                            'isDraft' => false,
                             'data' => $saved_ticket
                         ]);
                     } else {

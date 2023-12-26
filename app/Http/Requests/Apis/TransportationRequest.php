@@ -30,7 +30,7 @@ class TransportationRequest extends FormRequest
             'timeOut' => 'string',
             'notes' => 'string',
             'specialInstructionsforjob' => 'string',
-            'poNumber' => 'numeric',
+            'poNumber' => 'string',
             'specialInstructionsforpo' => 'string',
             'siteContactName' => 'string',
             'specialInstructionsforconName' => 'string',
