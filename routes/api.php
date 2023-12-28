@@ -4,6 +4,7 @@ use App\Http\Controllers\Apis\AccountController;
 use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\PasswordResetController;
 use App\Http\Controllers\Apis\JobController;
+use App\Http\Controllers\Apis\PaydutyController;
 use App\Http\Controllers\Apis\PdfController;
 use App\Http\Controllers\Apis\RiggerController;
 use App\Http\Controllers\Apis\TransportationController;
@@ -51,6 +52,9 @@ Route::get('job-selector/{isScci?}', [JobController::class, 'getJobNumbers']);
 // Rigger Ticket
 Route::post('rigger-ticket', [RiggerController::class, 'create_ticket']);
 Route::get('rigger-tickets/{id?}', [RiggerController::class, 'getRiggerTickets']);
+
+// Payduty
+Route::get('pay-duty/{id?}', [PaydutyController::class, 'getPayDuty']);
 
 // Generate PDFs
 Route::get('pdf/{id}', [PdfController::class, 'generatePdf']);
