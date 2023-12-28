@@ -236,121 +236,153 @@ class TransportationController extends Controller
     public function updateSignatures(TransportationsignsRequest $request){
         
         $ticket = Transportation::where('id', $request->ticketId)->first();
-        if($ticket != null) {
-            if($ticket->isDraft === 1) {
-                if($ticket->signaturesLeft > 0){
-                    $isCustomerSignature = $ticket->customerSignature ?? null;
-                    $isShipperSignature = $ticket->shipperSignature ?? null;
-                    $isDriverSignature = $ticket->driverSignature ?? null;
+        $userRole = Account::where('id', $request->userId)->value('role');
+        if ($userRole == $this->appRoles['m']) {
+            if($ticket != null) {
+                if($ticket->isDraft === 1) {
+                    if($ticket->signaturesLeft > 0){
 
-                    $signature_data = [
-                        'folderName' => 'transportation-signatures',
-                        'customerImageName' => 'customer-sign',
-                        'shipperImageName' => 'shipper-sign',
-                        'driverImageName' => 'driver-sign',
-                        'customer_file_type' => 'customer-signature',
-                        'shipper_file_type' => 'shipper-signature',
-                        'driver_file_type' => 'driver-signature',
-                        'file_ext_type' => 'image',
-                        'transportationId' => $request->ticketId,
-                        'userId' => $request->userId,
-                    ];
-                    
-                    // Customer signature
-                    $customerSign = $request->file('customerSignature');
+                        $shipperCount = 0;
+                        $customerCount = 0;
+                        $driverCount = 0;
 
-                    // Shipper Signature
-                    $shipperSign = $request->file('shipperSignature');
+                        $isCustomerSignature = $ticket->customerSignature ?? null;
+                        $isShipperSignature = $ticket->shipperSignature ?? null;
+                        $isDriverSignature = $ticket->driverSignature ?? null;
 
-                    // Driver Signature
-                    $driverSign = $request->file('driverSignature');
+                        $signature_data = [
+                            'folderName' => 'transportation-signatures',
+                            'customerImageName' => 'customer-sign',
+                            'shipperImageName' => 'shipper-sign',
+                            'driverImageName' => 'driver-sign',
+                            'customer_file_type' => 'customer-signature',
+                            'shipper_file_type' => 'shipper-signature',
+                            'driver_file_type' => 'driver-signature',
+                            'file_ext_type' => 'image',
+                            'transportationId' => $request->ticketId,
+                            'userId' => $request->userId,
+                        ];
+                        
+                        // Customer signature
+                        $customerSign = $request->file('customerSignature');
 
-                    // Customer
-                    if($isCustomerSignature === null) {
-                        // Cus
-                        if ($request->has('customerSignature')) {
-                            // Save customer signature to folder.
-                            $customerSignature = Fileupload::singleUploadFile($customerSign, $signature_data['transportationId'], $signature_data['folderName'], $signature_data['customerImageName']);
-                            // Save customer signature to db.
-                            $cusSave = Helper::addFile($customerSignature, $signature_data['customer_file_type'], $signature_data['file_ext_type'], 0, $signature_data['userId'], 0, $signature_data['transportationId'], 0);
-                            if($cusSave['isSave']) {
-                                $customerCount = 1;
+                        // Shipper Signature
+                        $shipperSign = $request->file('shipperSignature');
+
+                        // Driver Signature
+                        $driverSign = $request->file('driverSignature');
+
+                        // Customer
+                        if($isCustomerSignature === null) {
+                            // Cus
+                            if ($request->has('customerSignature')) {
+                                // Save customer signature to folder.
+                                $customerSignature = Fileupload::singleUploadFile($customerSign, $signature_data['transportationId'], $signature_data['folderName'], $signature_data['customerImageName']);
+                                // Save customer signature to db.
+                                $cusSave = Helper::addFile($customerSignature, $signature_data['customer_file_type'], $signature_data['file_ext_type'], 0, $signature_data['userId'], 0, $signature_data['transportationId'], 0);
+                                if($cusSave['isSave']) {
+                                    $customerCount = 1;
+                                }
                             }
+                        } elseif($request->has('customerSignature') && $isCustomerSignature != null) {
+                            return response()->json([
+                                "status" => 409,
+                                "message" => "Signature is already exist."
+                            ], 409);
+                        }
+
+
+                        if($isShipperSignature === null) {
+                            // Shipper
+                            if ($request->has('shipperSignature')) {
+                                // Save shipper signature to folder.
+                                $shipperSignature = Fileupload::singleUploadFile($shipperSign, $signature_data['transportationId'], $signature_data['folderName'], $signature_data['shipperImageName']);
+                                // Save shipper signature to db.
+                                $shipSave = Helper::addFile($shipperSignature, $signature_data['shipper_file_type'], $signature_data['file_ext_type'], 0, $signature_data['userId'], 0, $signature_data['transportationId'], 0);
+                                if($shipSave['isSave']) {
+                                    $shipperCount = 1;
+                                }
+                            } 
+                        } elseif($request->has('shipperSignature') && $isCustomerSignature != null) {
+                            return response()->json([
+                                "status" => 409,
+                                "message" => "Signature is already exist."
+                            ], 409);
+                        }
+
+                        if($isDriverSignature === null) {
+                            // Driver
+                            if ($request->has('driverSignature')) {
+                                // Save driver signature to folder.
+                                $driverSignature = Fileupload::singleUploadFile($driverSign, $signature_data['transportationId'], $signature_data['folderName'], $signature_data['driverImageName']);
+                                // Save driver signature to db.
+                                $driveSave = Helper::addFile($driverSignature, $signature_data['driver_file_type'], $signature_data['file_ext_type'], 0, $signature_data['userId'], 0, $signature_data['transportationId'], 0);
+                                if($driveSave['isSave']) {
+                                    $driverCount = 1;
+                                }
+                            }
+                        } elseif($request->has('driverSignature') && $isCustomerSignature != null) {
+                            return response()->json([
+                                "status" => 409,
+                                "message" => "Signature is already exist."
+                            ], 409);
+                        }
+
+                        $totalSignature = $customerCount + $shipperCount + $driverCount;
+                        $signaturesLeft = $ticket->signaturesLeft - $totalSignature;
+                        
+                        if($signaturesLeft === 0) {
+                            // Update signaturesLeft, isDraft field to indicate that Transportation Ticket is completely submitted.
+                            Transportation::where('id', $request->ticketId)->update([
+                                'isDraft' => 0,
+                                'signaturesLeft' => $signaturesLeft
+                            ]);
+
+                            return response()->json([
+                                'status' => 200,
+                                'message' => 'Ticket submitted successfully.',
+                                'isDraft' => false,
+                                'ticketId' => $ticket->id,
+                            ]);
+                        }
+                        else{
+
+                            Transportation::where('id', $request->ticketId)->update([
+                                'signaturesLeft' => $signaturesLeft
+                            ]);
+
+                            return response()->json([
+                                'status' => 200,
+                                'message' => 'Saved as draft successfully.',
+                                'isDraft' => true
+                            ]);
                         }
                     }
-
-
-                    if($isShipperSignature === null) {
-                        // Shipper
-                        if ($request->has('shipperSignature')) {
-                            // Save shipper signature to folder.
-                            $shipperSignature = Fileupload::singleUploadFile($shipperSign, $signature_data['transportationId'], $signature_data['folderName'], $signature_data['shipperImageName']);
-                            // Save shipper signature to db.
-                            $shipSave = Helper::addFile($shipperSignature, $signature_data['shipper_file_type'], $signature_data['file_ext_type'], 0, $signature_data['userId'], 0, $signature_data['transportationId'], 0);
-                            if($shipSave['isSave']) {
-                                $shipperCount = 1;
-                            }
-                        }
-                    }
-
-                    if($isDriverSignature === null) {
-                        // Driver
-                        if ($request->has('driverSignature')) {
-                            // Save driver signature to folder.
-                            $driverSignature = Fileupload::singleUploadFile($driverSign, $signature_data['transportationId'], $signature_data['folderName'], $signature_data['driverImageName']);
-                            // Save driver signature to db.
-                            $driveSave = Helper::addFile($driverSignature, $signature_data['driver_file_type'], $signature_data['file_ext_type'], 0, $signature_data['userId'], 0, $signature_data['transportationId'], 0);
-                            if($driveSave['isSave']) {
-                                $driverCount = 1;
-                            }
-                        }
-                    }
-
-                    $totalSignature = $customerCount + $shipperCount + $driverCount;
-                    $signaturesLeft = 3 - $totalSignature;
-                    
-                    if($signaturesLeft === 0) {
-                        // Update signaturesLeft, isDraft field to indicate that Transportation Ticket is completely submitted.
-                        $data = Transportation::where('id', $request->ticketId)->update([
-                            'isDraft' => 0,
-                            'signaturesLeft' => $signaturesLeft
-                        ]);
-
+                    else {
                         return response()->json([
-                            'status' => 200,
-                            'message' => 'Ticket submitted successfully.',
-                            'isDraft' => false,
-                            'ticketId' => $ticket->id,
-                            'data' => $data
-                        ]);
-                    }
-                    else{
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Saved as draft successfully.',
-                            'isDraft' => true
-                        ]);
+                            "status" => 404,
+                            "message" => "You have no remaining signatures left."
+                        ], 404);
                     }
                 }
                 else {
                     return response()->json([
                         "status" => 404,
-                        "message" => "You have no remaining signatures left."
+                        "message" => "Invalid Ticket."
                     ], 404);
                 }
             }
             else {
                 return response()->json([
                     "status" => 404,
-                    "message" => "Invalid Ticket."
+                    "message" => "Ticket Id is required."
                 ], 404);
             }
-        }
-        else {
+        } else {
             return response()->json([
-                "status" => 404,
-                "message" => "Ticket Id is required."
-            ], 404);
+                'status' => 401,
+                'message' => 'You are not authorized for this action.'
+            ], 401);
         }
 
     }
