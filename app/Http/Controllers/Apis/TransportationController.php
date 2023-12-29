@@ -45,7 +45,7 @@ class TransportationController extends Controller
             }
 
             // Apply condition to the query
-            $query->where($field, 'like', "%$value%");
+            $query->where($field, '=', $value);
         }
 
         // Fetch the records
