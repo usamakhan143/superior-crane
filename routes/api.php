@@ -68,3 +68,7 @@ Route::post('/pdf-send-email/{id}', [PdfController::class, 'generatePdfAndSendEm
 Route::get('transportations', [TransportationController::class, 'getTickets']);
 Route::post('transportation-ticket', [TransportationController::class, 'createTicket']);
 Route::post('transportation-draft', [TransportationController::class, 'updateSignatures']);
+
+// Web Main dashboard Page
+Route::get('jobweekadd', [JobController::class, 'getJobsByWeekFwd']);
+Route::get('jobweek', [JobController::class, 'getJobsByWeekPvs']);

@@ -56,6 +56,7 @@
             padding: 7px;
             text-align: left;
             font-size: 13px;
+            background-color:#FDF5F4;
         }
 
         th {
@@ -225,7 +226,7 @@
                 <td>{{ $data->shipperName }}</td>
                 <td>
                     @if ($data->shipperSignature->file_url ?? 0 != 0)
-                        <img src="{{ $data->shipperSignature->file_url ?? '-' }}" width="100px" />
+                        <img src="{{ asset('storage/'.$data->shipperSignature->file_url) ?? '-' }}" width="100px" />
                     @else
                         -
                     @endif
@@ -240,7 +241,7 @@
                 <td>{{ $data->customerName }}</td>
                 <td>
                     @if ($data->customerSignature->file_url ?? 0 != 0)
-                        <img src="{{ $data->customerSignature->file_url ?? '-' }}" width="100px" />
+                        <img src="{{ asset('storage/'.$data->customerSignature->file_url) ?? '-' }}" width="100px" />
                     @else
                         -
                     @endif
@@ -255,7 +256,7 @@
                 <td>{{ $data->pickupDriverName }}</td>
                 <td>
                     @if ($data->driverSignature->file_url ?? 0 != 0)
-                        <img src="{{ $data->driverSignature->file_url ?? '-' }}" width="100px" />
+                        <img src="{{ asset('storage/'.$data->driverSignature->file_url) ?? '-' }}" width="100px" />
                     @else
                         -
                     @endif

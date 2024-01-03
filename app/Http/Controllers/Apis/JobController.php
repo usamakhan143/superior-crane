@@ -12,6 +12,7 @@ use App\Http\Resources\Jobs\GetjobResource;
 use App\Models\Apis\Auth\Account;
 use App\Models\Apis\File;
 use App\Models\Apis\Job;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -278,5 +279,66 @@ class JobController extends Controller
                 'message' => 'isScci is required as a parameter after the endpoint.'
             ], 404);
         }
+    }
+
+
+    // Web admin dashboard page API.
+
+    // Get Jobs by forward week API.
+    public function getJobsByWeekFwd(Request $request) {
+        
+        $query = Job::query();
+
+        // Filter by job_date
+        if ($request->has('jobDate')) {
+            // Parse the provided date or use the current date if not provided
+            $currentDate = Carbon::parse($request->input('jobDate')) ?? Carbon::now();
+            $nextWeek = $currentDate->copy()->addWeek();// Apply condition to the query
+            $query->whereBetween('job_date', [$currentDate, $nextWeek]);
+        }
+        else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'jobDate query param is required.'
+            ], 404);
+        }
+
+        // Fetch the records
+        $all_jobs = $query->get();
+        $r_data = GetjobResource::collection($all_jobs);
+        return response()->json([
+            'status' => 200,
+            'jobsInWeek' => $r_data,
+            'date' => $nextWeek->toDateString()
+        ]);
+    }
+
+    // Get Jobs by previous week API.
+    public function getJobsByWeekPvs(Request $request) {
+        
+        $query = Job::query();
+
+        // Filter by job_date
+        if ($request->has('jobDate')) {
+            // Parse the provided date or use the current date if not provided
+            $currentDate = Carbon::parse($request->input('jobDate')) ?? Carbon::now();
+            $previousWeek = $currentDate->copy()->subWeek();// Apply condition to the query
+            $query->whereBetween('job_date', [$previousWeek, $currentDate]);
+        }
+        else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'jobDate query param is required.'
+            ], 404);
+        }
+
+        // Fetch the records
+        $all_jobs = $query->get();
+        $r_data = GetjobResource::collection($all_jobs);
+        return response()->json([
+            'status' => 200,
+            'jobsInWeek' => $r_data,
+            'date' => $previousWeek->toDateString()
+        ]);
     }
 }

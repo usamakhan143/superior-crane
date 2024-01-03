@@ -56,6 +56,7 @@
             padding: 7px;
             text-align: left;
             font-size: 13px;
+            background-color:#FDF5F4;
         }
 
         th {
@@ -246,7 +247,7 @@
                     {{ $data->notesOthers }}
                 </td>
                 <td>
-                    <img src='{{ $data->signature->file_url }}' width="100px" />
+                    <img src='{{ asset('storage/'.$data->signature->file_url) }}' width="100px" />
                 </td>
             </tr>
         </tbody>
@@ -281,7 +282,7 @@
                     <td>{{ $data->payDuty->officer }}</td>
                     <td>{{ $data->payDuty->officerName }}</td>
                     <td>{{ $data->payDuty->division }}</td>
-                    <td><img src='{{ $data->payDuty->signature->file_url }}' width="100px" /></td>
+                    <td><img src='{{ asset('storage/'.$data->payDuty->signature->file_url) }}' width="100px" /></td>
                 </tr>
             </tbody>
         </table>
