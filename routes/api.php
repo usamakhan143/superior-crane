@@ -3,14 +3,13 @@
 use App\Http\Controllers\Apis\AccountController;
 use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\PasswordResetController;
+use App\Http\Controllers\Apis\FilterController;
 use App\Http\Controllers\Apis\JobController;
 use App\Http\Controllers\Apis\PaydutyController;
 use App\Http\Controllers\Apis\PdfController;
 use App\Http\Controllers\Apis\RiggerController;
 use App\Http\Controllers\Apis\TransportationController;
-use App\Mail\SendOtp;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,3 +71,6 @@ Route::post('transportation-draft', [TransportationController::class, 'updateSig
 // Web Main dashboard Page
 Route::get('jobweekadd', [JobController::class, 'getJobsByWeekFwd']);
 Route::get('jobweek', [JobController::class, 'getJobsByWeekPvs']);
+
+// Filters
+Route::post('jobfilter', [FilterController::class, 'JobFilter']);
