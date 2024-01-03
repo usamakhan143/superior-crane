@@ -4,7 +4,7 @@ namespace App\Http\Requests\Apis;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class JobfilterRequest extends FormRequest
+class RiggerfilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class JobfilterRequest extends FormRequest
     public function rules()
     {
         return [
-            'clientName' => 'nullable',
-            'address' => 'nullable',
-            'jobDate' => 'nullable|date'
+            'customer' => 'nullable',
+            'location' => 'nullable',
+            'date' => 'nullable|date'
         ];
     }
 
@@ -41,5 +41,4 @@ class JobfilterRequest extends FormRequest
 
         throw new \Illuminate\Validation\ValidationException($validator, $response);
     }
-
 }
