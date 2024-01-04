@@ -29,4 +29,15 @@ class PaydutyfilterRequest extends FormRequest
             'date' => 'nullable|date'
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        $response = response()->json([
+            'status' => 422,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors(),
+        ], 422);
+
+        throw new \Illuminate\Validation\ValidationException($validator, $response);
+    }
 }
