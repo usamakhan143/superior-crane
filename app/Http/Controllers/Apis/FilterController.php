@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Apis;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\JobfilterRequest;
+use App\Http\Requests\Apis\PaydutyfilterRequest;
 use App\Http\Requests\Apis\RiggerfilterRequest;
 use App\Http\Resources\Jobs\GetjobResource;
+use App\Http\Resources\Payduty\PaydutyResource;
 use App\Http\Resources\Rigger\RiggerResource;
 use App\Models\Apis\Job;
+use App\Models\Apis\Payduty;
 use App\Models\Apis\Rigger;
 
 class FilterController extends Controller
@@ -72,6 +75,39 @@ class FilterController extends Controller
         $riggerResources = RiggerResource::collection($riggers);
 
         return response()->json($riggerResources);
+
+    }
+
+
+    // Payduty Filter
+    public function paydutyFilter(PaydutyfilterRequest $request) {
+
+        // Get the query parameters
+        $officerName = $request->input('officerName');
+        $location = $request->input('location');
+        $date = $request->input('date');
+
+        // Initialize the query
+        $query = Payduty::query();
+
+        // Apply filters based on the request parameters
+        if ($officerName) {
+            $query->where('officerName', '=', $officerName);
+        }
+
+        if ($location) {
+            $query->orwhere('location', '=', $location);
+        }
+
+        if ($date) {
+            $query->orwhere('date', '=', $date);
+        }
+
+        // Fetch the records
+        $payduties = $query->get();
+        $paydutyResources = PaydutyResource::collection($payduties);
+
+        return response()->json($paydutyResources);
 
     }
 }

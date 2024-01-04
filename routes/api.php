@@ -75,3 +75,4 @@ Route::get('jobweek', [JobController::class, 'getJobsByWeekPvs']);
 // Filters
 Route::post('jobfilter', [FilterController::class, 'JobFilter']);
 Route::post('riggerfilter', [FilterController::class, 'riggerFilter']);
+Route::post('dutyfilter', [FilterController::class, 'paydutyFilter']);
