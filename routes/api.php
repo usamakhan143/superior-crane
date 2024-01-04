@@ -76,3 +76,4 @@ Route::get('jobweek', [JobController::class, 'getJobsByWeekPvs']);
 Route::post('jobfilter', [FilterController::class, 'JobFilter']);
 Route::post('riggerfilter', [FilterController::class, 'riggerFilter']);
 Route::post('dutyfilter', [FilterController::class, 'paydutyFilter']);
+Route::post('transfilter', [FilterController::class, 'transportationFilter']);

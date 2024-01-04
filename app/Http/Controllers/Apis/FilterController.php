@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\JobfilterRequest;
 use App\Http\Requests\Apis\PaydutyfilterRequest;
 use App\Http\Requests\Apis\RiggerfilterRequest;
+use App\Http\Requests\Apis\TransportationfilterRequest;
 use App\Http\Resources\Jobs\GetjobResource;
 use App\Http\Resources\Payduty\PaydutyResource;
 use App\Http\Resources\Rigger\RiggerResource;
+use App\Http\Resources\Transportation\TransportationResource;
 use App\Models\Apis\Job;
 use App\Models\Apis\Payduty;
 use App\Models\Apis\Rigger;
+use App\Models\Apis\Transportation;
 
 class FilterController extends Controller
 {
@@ -108,6 +111,39 @@ class FilterController extends Controller
         $paydutyResources = PaydutyResource::collection($payduties);
 
         return response()->json($paydutyResources);
+
+    }
+
+
+       // Transportation Filter
+       public function transportationFilter(TransportationfilterRequest $request) {
+
+        // Get the query parameters
+        $customerName = $request->input('customerName');
+        $location = $request->input('billingAddress');
+        $date = $request->input('dateforcustomer');
+
+        // Initialize the query
+        $query = Transportation::query();
+
+        // Apply filters based on the request parameters
+        if ($customerName) {
+            $query->where('customerName', '=', $customerName);
+        }
+
+        if ($location) {
+            $query->orwhere('billingAddress', '=', $location);
+        }
+
+        if ($date) {
+            $query->orwhere('customerDate', '=', $date);
+        }
+
+        // Fetch the records
+        $transportation = $query->get();
+        $transportationResources = TransportationResource::collection($transportation);
+
+        return response()->json($transportationResources);
 
     }
 }
