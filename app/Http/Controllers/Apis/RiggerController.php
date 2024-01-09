@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Apis;
 
+use App\Exports\RiggerExport;
 use App\Helpers\Fileupload;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,7 @@ use App\Models\Apis\Job;
 use App\Models\Apis\Payduty;
 use App\Models\Apis\Rigger;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RiggerController extends Controller
 {
@@ -233,5 +235,11 @@ class RiggerController extends Controller
                 'message' => 'You are not authorized for this action.'
             ], 401);
         }
+    }
+
+
+    // Export to excel
+    public function exportToExcel(){
+        return Excel::download(new RiggerExport, 'rigger.xlsx');
     }
 }

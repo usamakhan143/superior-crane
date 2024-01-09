@@ -26,7 +26,7 @@ class UpdatejobRequest extends FormRequest
     {
         $status = ['goodTogo', 'onHold', 'inProblem'];
         return [
-            'riggerAssigned' => 'numeric',
+            'riggerAssigned' => 'nullable|numeric',
             'imageFiles.*' => 'file|mimes:jpg,png,jpeg',
             // 'enterBy' => 'required',
             'statusCode' => [

@@ -26,10 +26,23 @@ class AddResource extends JsonResource
             'riggerAssigned' => $this->rigger_assigned,
             'supplierName' => $this->supplier_name,
             'notes' => $this->notes,
-            'imageFiles' => $this->images->pluck('file_url')->toArray(),
+            'imageFiles' => $this->concatenateImageUrls($this->images->pluck('file_url')->toArray()),
             'enterBy' => $this->enter_by,
             'statusCode' => $this->status_code,
             'isSCCI' => $this->is_scci
         ];
+    }
+
+    private function concatenateImageUrls()
+    {
+        if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
+            return $this->images->map(function ($image) {
+                return $image['base_url'] . $image['file_url'];
+            })->toArray();
+        } else {
+            return $this->images->map(function ($image) {
+                return $image['base_url'] . 'storage/' . $image['file_url'];
+            })->toArray();
+        }
     }
 }

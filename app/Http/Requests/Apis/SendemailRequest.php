@@ -24,7 +24,7 @@ class SendemailRequest extends FormRequest
     public function rules()
     {
         return [
-            'riggerId' => 'numeric',
+            'riggerId' => 'nullable|numeric',
             'email' => 'required|email',
             'isRigger' => 'required|boolean'
         ];

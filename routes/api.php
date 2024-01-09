@@ -77,3 +77,6 @@ Route::post('jobfilter', [FilterController::class, 'JobFilter']);
 Route::post('riggerfilter', [FilterController::class, 'riggerFilter']);
 Route::post('dutyfilter', [FilterController::class, 'paydutyFilter']);
 Route::post('transfilter', [FilterController::class, 'transportationFilter']);
+
+// Export to Excel
+Route::get('export', [RiggerController::class, 'exportToExcel']);
