@@ -236,10 +236,4 @@ class RiggerController extends Controller
             ], 401);
         }
     }
-
-
-    // Export to excel
-    public function exportToExcel(){
-        return Excel::download(new RiggerExport, 'rigger.xlsx');
-    }
 }

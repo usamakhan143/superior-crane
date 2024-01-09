@@ -3,12 +3,14 @@
 use App\Http\Controllers\Apis\AccountController;
 use App\Http\Controllers\Apis\Auth\LoginController;
 use App\Http\Controllers\Apis\Auth\PasswordResetController;
+use App\Http\Controllers\Apis\ExportexcelController;
 use App\Http\Controllers\Apis\FilterController;
 use App\Http\Controllers\Apis\JobController;
 use App\Http\Controllers\Apis\PaydutyController;
 use App\Http\Controllers\Apis\PdfController;
 use App\Http\Controllers\Apis\RiggerController;
 use App\Http\Controllers\Apis\TransportationController;
+use App\Models\Apis\Transportation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -79,4 +81,5 @@ Route::post('dutyfilter', [FilterController::class, 'paydutyFilter']);
 Route::post('transfilter', [FilterController::class, 'transportationFilter']);
 
 // Export to Excel
-Route::get('export', [RiggerController::class, 'exportToExcel']);
+Route::get('rigger-excel', [ExportexcelController::class, 'exportToExcelFromRigger']);
+Route::get('transportation-excel', [ExportexcelController::class, 'exportToExcelFromTransportation']);
