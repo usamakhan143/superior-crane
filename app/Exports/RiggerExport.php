@@ -11,13 +11,57 @@ class RiggerExport implements FromCollection, WithHeadings, WithStyles
 {
     public function collection()
     {
-        return Rigger::all(['ticketNumber', 'specificationsAndRemarks', 'customer', 'location', 'poNumber', 'date', 'startJob', 'arrivalYard', 'travelTime', 'totalHours', 'rating', 'operation', 'emailAddress', 'notesOthers', 'leaveYard', 'finishJob', 'lunch', 'craneTime', 'craneNumber', 'boomLength', 'otherEquipment']);
+        return Rigger::all([
+            'ticketNumber', 
+            'specificationsAndRemarks', 
+            'customer', 
+            'location', 
+            'poNumber', 
+            'date', 
+            'startJob', 
+            'arrivalYard', 
+            'travelTime', 
+            'totalHours', 
+            'rating', 
+            'operation', 
+            'emailAddress', 
+            'notesOthers', 
+            'leaveYard', 
+            'finishJob', 
+            'lunch', 
+            'craneTime', 
+            'craneNumber', 
+            'boomLength', 
+            'otherEquipment'
+        ]);
     }
 
     public function headings(): array
     {
         // Define the column headers
-        return ['Ticket Number', 'Specifications & Remarks', 'Customer', 'Location', 'PO Number', 'Date', 'Start Job', 'Arrival Yard', 'Travel Time', 'Total Hours', 'Rating', 'Operation', 'Email', 'Notes', 'Leave Yard', 'Finish Job', 'Lunch', 'Crane Time', 'Crane Number', 'Boom Length', 'Equipment to be used']; // Replace Header1, Header2, Header3 with your actual column headers
+        return [
+            'Ticket Number', 
+            'Specifications & Remarks', 
+            'Customer', 
+            'Location', 
+            'PO Number', 
+            'Date', 
+            'Start Job', 
+            'Arrival Yard', 
+            'Travel Time', 
+            'Total Hours', 
+            'Rating', 
+            'Operation', 
+            'Email', 
+            'Notes', 
+            'Leave Yard', 
+            'Finish Job', 
+            'Lunch', 
+            'Crane Time', 
+            'Crane Number', 
+            'Boom Length', 
+            'Equipment to be used'
+        ];
     }
 
     public function styles($sheet)
