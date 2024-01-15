@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Apis\SendemailRequest;
 use App\Mail\PdfEmail;
 use App\Models\Apis\Job;
+use App\Models\Apis\Payduty;
 use App\Models\Apis\Rigger;
 use App\Models\Apis\Transportation;
 use Illuminate\Support\Facades\Mail;
@@ -248,6 +249,33 @@ class PdfController extends Controller
             return [
                 'status' => 200,
                 'message' => 'Ticket Id is required as a parameter.'
+            ];
+        }
+
+    }
+
+    // Export to PDF for Payduty
+    public function clickToGetPaydutyPdf($id = null) {
+        
+        $pdfOptions = [
+            'dpi' => 150,
+            'isHtml5ParserEnabled' => true,
+            'isPhpEnabled' => true
+        ];
+        if ($id != null) {
+
+            $riggerId = Payduty::where('id',$id)->value('rigger_id');
+
+            $data = Rigger::where('id', $riggerId)->first();
+
+            $pdf = PDF::loadView('pdf.riggerpayduty', ['data' => $data])->setPaper('A4', 'landscape')->setOption($pdfOptions);
+            
+            return $pdf->download($data->ticketNumber.'.pdf');
+        }
+        else {
+            return [
+                'status' => 200,
+                'message' => 'Payduty Id is required as a parameter.'
             ];
         }
 

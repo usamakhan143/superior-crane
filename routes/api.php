@@ -88,3 +88,4 @@ Route::get('payduty-excel', [ExportexcelController::class, 'exportToExcelFromPay
 // Export to PDF
 Route::get('rigger-pdf/{id?}', [PdfController::class, 'clickToGetRiggerPdf']);
 Route::get('transportation-pdf/{id?}', [PdfController::class, 'clickToGetTransportationPdf']);
+Route::get('payduty-pdf/{id?}', [PdfController::class, 'clickToGetPaydutyPdf']);
