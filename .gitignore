@@ -20,4 +20,13 @@ yarn-error.log
 /public/rigger-signatures
 /public/transportation-signatures
 /public/pdf
+
+/storage/job-gallery
+/storage/payduty-signatures
+/storage/rigger-gallery
+/storage/transportation-gallery
+/storage/rigger-signatures
+/storage/transportation-signatures
+/storage/pdf
+
 composer - copy.json

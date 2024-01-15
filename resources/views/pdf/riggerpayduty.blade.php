@@ -247,7 +247,12 @@
                     {{ $data->notesOthers }}
                 </td>
                 <td>
-                    <img src='{{ asset('storage/'.$data->signature->file_url) }}' width="100px" />
+                    @if(file_exists(storage_path($data->signature->file_url)))
+                        <!-- If the image exists, display it -->
+                        <img src='{{ asset('storage/'.$data->signature->file_url) }}' width="100px" alt="Signature" />
+                    @else
+                        NA
+                    @endif
                 </td>
             </tr>
         </tbody>
@@ -282,7 +287,13 @@
                     <td>{{ $data->payDuty->officer }}</td>
                     <td>{{ $data->payDuty->officerName }}</td>
                     <td>{{ $data->payDuty->division }}</td>
-                    <td><img src='{{ asset('storage/'.$data->payDuty->signature->file_url) }}' width="100px" /></td>
+                    <td>
+                        @if(file_exists(storage_path($data->payDuty->signature->file_url)))
+                            <img src='{{ asset('storage/'.$data->payDuty->signature->file_url) }}' width="100px" alt="Signature" />
+                        @else
+                            NA
+                        @endif
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -202,4 +202,34 @@ class PdfController extends Controller
             ], 404);
         }
     }
+
+
+    // Export to PDF for Rigger
+    public function clickToGetRiggerPdf($id) {
+        
+        $pdfOptions = [
+            'dpi' => 150,
+            'isHtml5ParserEnabled' => true,
+            'isPhpEnabled' => true
+        ];
+        if ($id) {
+
+            $data = Rigger::where('id', $id)->first();
+
+            $pdf = PDF::loadView('pdf.riggerpayduty', ['data' => $data])->setPaper('A4', 'landscape')->setOption($pdfOptions);
+            
+            return $pdf->download($data->ticketNumber.'.pdf');
+        }
+        else {
+            return [
+                'status' => 200,
+                'message' => 'Ticket Id is required as a parameter.'
+            ];
+        }
+    }
+
+    // Export to PDF for Transportation
+    public function clickToGetTransportationPdf($id) {
+        return 'hello'; 
+    }
 }
