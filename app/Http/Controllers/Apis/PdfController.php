@@ -205,14 +205,14 @@ class PdfController extends Controller
 
 
     // Export to PDF for Rigger
-    public function clickToGetRiggerPdf($id) {
+    public function clickToGetRiggerPdf($id = null) {
         
         $pdfOptions = [
             'dpi' => 150,
             'isHtml5ParserEnabled' => true,
             'isPhpEnabled' => true
         ];
-        if ($id) {
+        if ($id != null) {
 
             $data = Rigger::where('id', $id)->first();
 
@@ -229,7 +229,27 @@ class PdfController extends Controller
     }
 
     // Export to PDF for Transportation
-    public function clickToGetTransportationPdf($id) {
-        return 'hello'; 
+    public function clickToGetTransportationPdf($id = null) {
+        
+        $pdfOptions = [
+            'dpi' => 150,
+            'isHtml5ParserEnabled' => true,
+            'isPhpEnabled' => true
+        ];
+        if ($id != null) {
+
+            $data = Transportation::where('id', $id)->first();
+
+            $pdf = PDF::loadView('pdf.transportation', ['data' => $data])->setPaper('A4', 'landscape')->setOption($pdfOptions);
+            
+            return $pdf->download($data->ticketNumber.'.pdf');
+        }
+        else {
+            return [
+                'status' => 200,
+                'message' => 'Ticket Id is required as a parameter.'
+            ];
+        }
+
     }
 }
