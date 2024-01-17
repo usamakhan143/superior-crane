@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Apis;
 
+use App\Exports\JobExport;
 use App\Exports\PaydutyExport;
 use App\Exports\RiggerExport;
 use App\Exports\TransportationExport;
@@ -23,5 +24,10 @@ class ExportexcelController extends Controller
     // Payduty data Export to excel
     public function exportToExcelFromPayduty(){
         return Excel::download(new PaydutyExport, 'payduty.xlsx');
+    }
+
+    // Job data Export to excel
+    public function exportToExcelFromJob(){
+        return Excel::download(new JobExport, 'job.xlsx');
     }
 }

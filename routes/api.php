@@ -84,6 +84,7 @@ Route::post('transfilter', [FilterController::class, 'transportationFilter']);
 Route::get('rigger-excel', [ExportexcelController::class, 'exportToExcelFromRigger']);
 Route::get('transportation-excel', [ExportexcelController::class, 'exportToExcelFromTransportation']);
 Route::get('payduty-excel', [ExportexcelController::class, 'exportToExcelFromPayduty']);
+Route::get('job-excel', [ExportexcelController::class, 'exportToExcelFromJob']);
 
 // Export to PDF
 Route::get('rigger-pdf/{id?}', [PdfController::class, 'clickToGetRiggerPdf']);
