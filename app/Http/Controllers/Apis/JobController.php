@@ -94,7 +94,7 @@ class JobController extends Controller
     public function create_job(AddjobRequest $request)
     {
         $userRole = Account::where('id', $request->userId)->value('role');
-        if ($userRole == $this->appRoles['a'] || $userRole == $this->appRoles['sa']) {
+        if ($userRole == $this->appRoles['a'] || $userRole == $this->appRoles['sa'] || $userRole == $this->appRoles['m']) {
             $files = $request->file('imageFiles');
             if (is_array($files)) {
                 $image_data = [

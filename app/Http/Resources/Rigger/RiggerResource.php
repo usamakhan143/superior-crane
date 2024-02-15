@@ -16,6 +16,7 @@ class RiggerResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'ticketNumber' => $this->ticketNumber,
             'specificationsAndRemarks' => $this->specificationsAndRemarks,
             'customer' => $this->customer,
             'location' => $this->location,

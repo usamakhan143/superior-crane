@@ -25,41 +25,41 @@ class AddriggerticketRequest extends FormRequest
     {
         return [
             'specificationsAndRemarks' => 'nullable|string',
-            'customer' => 'required|string',
-            'location' => 'required|string',
+            'customer' => 'required|string', // R
+            'location' => 'required|string', // R
             'poNumber' => 'nullable|string',
-            'date' => 'required|date',
-            'startJob' => 'required|string',
+            'date' => 'required|date', // R
+            'startJob' => 'required|string', // R
             'arrivalYard' => 'nullable|string',
             'travelTime' => 'nullable|string|numeric',
-            'totalHours' => 'required|numeric',
+            'totalHours' => 'required|numeric', // R
             'rating' => 'nullable|string|numeric',
             'operator' => 'nullable|string',
-            'emailAddress' => 'required|email',
+            'emailAddress' => 'required|email', // R
             'notesOthers' => 'nullable|string',
-            'leaveYard' => 'required|string',
-            'finishJob' => 'required|string',
+            'leaveYard' => 'required|string', // R
+            'finishJob' => 'required|string', // R
             'lunch' => 'nullable|string',
             'craneTime' => 'nullable|string',
             'craneNumber' => 'nullable|string',
             'boomLength' => 'nullable|string',
             'otherEquipment' => 'nullable|string',
-            'isPayDuty' => 'required|boolean',
+            'isPayDuty' => 'required|boolean', // R
             'imageFiles.*' => 'file|mimes:jpg,png,jpeg',
-            'signature' => 'required|file|mimes:jpg,png,jpeg',
-            'jobId' => 'required|numeric|exists:jobs,id',
-            'userId' => 'required|numeric|exists:accounts,id',
+            'signature' => 'required|file|mimes:jpg,png,jpeg', // R
+            'jobId' => 'required|numeric|exists:jobs,id', // R
+            'userId' => 'required|numeric|exists:accounts,id', // R
             // Payduty Fields
-            'pdDate' => 'required_if:isPayDuty,1|date',
-            'pdLocation' => 'required_if:isPayDuty,1|string',
+            'pdDate' => 'required_if:isPayDuty,1|date', // R
+            'pdLocation' => 'required_if:isPayDuty,1|string', // R
             'pdStartTime' => 'nullable|string',
             'pdFinishTime' => 'nullable|string',
             'pdTotalHours' => 'nullable|numeric',
             'pdOfficer' => 'nullable|string',
-            'pdOfficerName' => 'required_if:isPayDuty,1|string',
+            'pdOfficerName' => 'required_if:isPayDuty,1|string', // R
             'pdDivision' => 'nullable|numeric',
-            'pdEmailAddress' => 'required_if:isPayDuty,1|email',
-            'pdSignature' => 'required_if:isPayDuty,1|file|mimes:jpg,png,jpeg',
+            'pdEmailAddress' => 'required_if:isPayDuty,1|email', // R
+            'pdSignature' => 'required_if:isPayDuty,1|file|mimes:jpg,png,jpeg', // R
         ];
     }
 

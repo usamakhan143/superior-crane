@@ -17,6 +17,7 @@ class TransportationResource extends JsonResource
         return [
             'id' => $this->id,
             'ticketNumber' => $this->ticketNumber,
+            'jobNumber' => $this->job->job_number,
             'pickupAddress' => $this->pickupAddress,
             // 'deliveryAddress' => $this->deliveryAddress,
             'billingAddress' => $this->billingAddress,

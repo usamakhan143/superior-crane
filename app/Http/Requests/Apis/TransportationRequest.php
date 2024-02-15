@@ -41,20 +41,20 @@ class TransportationRequest extends FormRequest
             'dateforshipper' => 'nullable|string',
             'timeInforshipper' => 'nullable|string',
             'timeOutforshipper' => 'nullable|string',
-            'pickUpDriverName' => 'required|string',
+            'pickUpDriverName' => 'required|string', // R
             'signaturefordriver' => 'file|mimes:jpg,png,jpeg',
-            'datefordriver' => 'required|date',
-            'timeInfordriver' => 'required|string',
-            'timeOutfordriver' => 'required|string',
-            'customerName' => 'required|string',
-            'customerEmail' => 'required|email',
+            'datefordriver' => 'required|date', // R
+            'timeInfordriver' => 'required|string', // R
+            'timeOutfordriver' => 'required|string', // R
+            'customerName' => 'required|string', // R
+            'customerEmail' => 'required|email', // R
             'signatureforcustomer' => 'file|mimes:jpg,png,jpeg',
-            'dateforcustomer' => 'required|date',
-            'timeInforcustomer' => 'required|string',
-            'timeOutforcustomer' => 'required|string',
+            'dateforcustomer' => 'required|date', // R
+            'timeInforcustomer' => 'required|string', // R
+            'timeOutforcustomer' => 'required|string', // R
             'imageFiles.*' => 'file|mimes:jpg,png,jpeg',
-            'userId' => 'required|numeric|exists:accounts,id',
-            'jobId' => 'required|numeric|exists:jobs,id'
+            'userId' => 'required|numeric|exists:accounts,id', // R
+            'jobId' => 'required|numeric|exists:jobs,id' // R
         ];
     }
 

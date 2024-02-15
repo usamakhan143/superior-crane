@@ -29,7 +29,9 @@ class AddResource extends JsonResource
             'imageFiles' => $this->concatenateImageUrls($this->images->pluck('file_url')->toArray()),
             'enterBy' => $this->enter_by,
             'statusCode' => $this->status_code,
-            'isSCCI' => $this->is_scci
+            'isSCCI' => $this->is_scci,
+            'isRiggerFilled' => $this->is_rigger,
+            'isTransportationFilled' => $this->is_transportation
         ];
     }
 

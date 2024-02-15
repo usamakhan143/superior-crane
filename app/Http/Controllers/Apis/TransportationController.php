@@ -103,8 +103,8 @@ class TransportationController extends Controller
                     $addTransportation->pickupAddress = $request->pickupAddress; // R
                     $addTransportation->deliveryAddress = $request->deliveryAddress ?? '-';
                     $addTransportation->billingAddress = $request->billingAddress; // R
-                    $addTransportation->TimeIn = $request->timeIn ?? 0;
-                    $addTransportation->TimeOut = $request->timeOut ?? 0;
+                    $addTransportation->TimeIn = $request->timeIn ?? '--:--';
+                    $addTransportation->TimeOut = $request->timeOut ?? '--:--';
                     $addTransportation->notes = $request->notes ?? '-';
                     $addTransportation->specialInstructionsForJobNumber = $request->specialInstructionsforjob ?? '-';
                     $addTransportation->poNumber = $request->poNumber ?? '-';
@@ -115,8 +115,8 @@ class TransportationController extends Controller
                     $addTransportation->specialInstructionsForSiteContactNumber = $request->specialInstructionsforconNo ?? '-';
                     $addTransportation->shipperName = $request->shipperName ?? '-';
                     $addTransportation->shipperDate = $request->dateforshipper ?? '-';
-                    $addTransportation->shipperTimeIn = $request->timeInforshipper ?? '-';
-                    $addTransportation->shipperTimeOut = $request->timeOutforshipper ?? '-';
+                    $addTransportation->shipperTimeIn = $request->timeInforshipper ?? '--:--';
+                    $addTransportation->shipperTimeOut = $request->timeOutforshipper ?? '--:--';
                     $addTransportation->pickupDriverName = $request->pickUpDriverName; // R
                     $addTransportation->pickupDriverDate = $request->datefordriver; // R
                     $addTransportation->pickupDriverTimeIn = $request->timeInfordriver; // R

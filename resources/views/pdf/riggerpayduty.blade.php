@@ -128,7 +128,7 @@
         <div class="company-head">
             <h1 class="company-info">SUPERIOR CRANE CANADA INC.</h1>
             <p class="tag-line">
-                12 GREENBRIAR ROAD, TORONTO, ONTARIO M2K 1H5 TEL: (416) 740-8107
+                110 Konrad Cres. Unit 9 Markham, Ontario L3R 9X2: (416) 740-8107
             </p>
         </div>
         <div class="header-child">

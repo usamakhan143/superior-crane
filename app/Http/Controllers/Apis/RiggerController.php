@@ -171,12 +171,12 @@ class RiggerController extends Controller
                             $add_payduty = new Payduty();
                             $add_payduty->date = $request->pdDate;
                             $add_payduty->location = $request->pdLocation;
-                            $add_payduty->startTime = $request->pdStartTime;
-                            $add_payduty->finishTime = $request->pdFinishTime;
-                            $add_payduty->totalHours = $request->pdTotalHours;
-                            $add_payduty->officer = $request->pdOfficer;
+                            $add_payduty->startTime = $request->pdStartTime ?? '--:--';
+                            $add_payduty->finishTime = $request->pdFinishTime ?? '--:--';
+                            $add_payduty->totalHours = $request->pdTotalHours ?? '-';
+                            $add_payduty->officer = $request->pdOfficer ?? '-';
                             $add_payduty->officerName = $request->pdOfficerName;
-                            $add_payduty->division = $request->pdDivision;
+                            $add_payduty->division = $request->pdDivision ?? '-';
                             $add_payduty->email = $request->pdEmailAddress;
                             $add_payduty->account_id = $add_riggertik->account_id;
                             $add_payduty->rigger_id = $add_riggertik->id;
